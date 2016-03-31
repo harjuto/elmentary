@@ -12,5 +12,6 @@ view address model =
   div []
     [ button [ onClick address SolarSystem.Decrement ] [ text "-" ]
     , div [] [ text (toString model.count) ]
+    , div [] [ text (toString model.planets) ]
     , button [ onClick address SolarSystem.Increment ] [ text "+" ]
     ]
