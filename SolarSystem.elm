@@ -18,7 +18,7 @@ type Action
   = AddPlanet | RemoveLastPlanet | Tick
 
 newPlanet: Float -> Planet
-newPlanet radius = { radius = radius, angle = 0, speed = 1, hit = False }
+newPlanet radius = { radius = radius, angle = 0, speed = 0.1, hit = False }
 
 initialModel : Model
 initialModel = { planets = [] }
@@ -40,7 +40,7 @@ tick planet =
   let
     oldAngle = planet.angle
     newAngle = normalizeAngle (oldAngle + planet.speed)
-    
+
   in
     { planet | angle = newAngle }
 
