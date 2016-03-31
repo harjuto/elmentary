@@ -23,7 +23,7 @@ drawPlanet : SolarSystem.Planet -> Form
 drawPlanet planet =
   circle 20
     |> filled rockBrown
-    |> move (10,10)
+    |> move (sin planet.angle * planet.radius, cos planet.angle * planet.radius)
 
 rockBrown : Color
 rockBrown =
