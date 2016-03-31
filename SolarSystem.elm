@@ -14,7 +14,7 @@ type alias Model =
   }
 
 type Action
-  = Increment | Decrement
+  = AddPlanet | RemoveLastPlanet
 
 newPlanet: Float -> Planet
 newPlanet radius = { radius = radius, angle = 0, speed = 1 }
@@ -27,9 +27,9 @@ initialModel = { planets = [] }
 update : Action -> Model -> Model
 update action model =
   case action of
-    Increment ->
+    AddPlanet ->
       { model | planets = model.planets ++ [newPlanet (toFloat (List.length model.planets))] }
-    Decrement ->
+    RemoveLastPlanet ->
       let
         removeLast planets = if List.length planets == 0 then [] else List.take (List.length planets - 1) planets
       in
