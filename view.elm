@@ -5,22 +5,30 @@ import Graphics.Element exposing (..)
 import SolarSystem as SolarSystem
 
 
-renderWorld : SolarSystem.Model -> Element
+world : SolarSystem.Model -> Element
 
-renderWorld model =
+world model =
   collage 800 800
-    [ circle 300
-        |> filled clearGrey
-        |> move (-10,0)
-    ]
+    (
+      [ space ] ++ List.map drawPlanet model.planets
+    )
 
+space : Form
+space =
+  circle 300
+    |> filled spaceBlack
+    |> move (0,0)
 
+drawPlanet : SolarSystem.Planet -> Form
+drawPlanet planet =
+  circle 20
+    |> filled rockBrown
+    |> move (10,10)
 
+rockBrown : Color
+rockBrown =
+  rgba 204 102 0 1
 
-
-
-
-
-clearGrey : Color
-clearGrey =
-  rgba 111 111 111 0.6
+spaceBlack : Color
+spaceBlack =
+  rgb 32 32 32
