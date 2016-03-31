@@ -6,14 +6,16 @@ import StartApp.Simple as StartApp
 main =
   StartApp.start { model = model, view = view, update = update }
 
-
-model = 0
+type alias Model =
+  { count: Int
+  }
+model = { count = 0 }
 
 
 view address model =
   div []
     [ button [ onClick address Decrement ] [ text "-" ]
-    , div [] [ text (toString model) ]
+    , div [] [ text (toString model.count) ]
     , button [ onClick address Increment ] [ text "+" ]
     ]
 
@@ -23,5 +25,5 @@ type Action = Increment | Decrement
 
 update action model =
   case action of
-    Increment -> model + 1
-    Decrement -> model - 1
+    Increment -> {model | count = model.count + 1 }
+    Decrement -> {model | count = model.count - 1}
