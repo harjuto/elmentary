@@ -13,5 +13,6 @@ view address model =
       div [] [ text (toString model.planets) ]
     , button [ onClick address SolarSystem.RemoveLastPlanet ] [ text "-" ]
     , button [ onClick address SolarSystem.AddPlanet ] [ text "+" ]
+    , button [ onClick address SolarSystem.Tick ] [ text "!" ]
     , fromElement (View.renderWorld model)
     ]
