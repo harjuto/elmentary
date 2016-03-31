@@ -5,6 +5,7 @@ import Effects exposing (Effects, Never)
 import Html exposing (div, button, text, fromElement)
 import Html.Events exposing (onClick)
 import Time as Time
+import Time exposing (..)
 import SolarSystem as SolarSystem
 import StartApp
 import Task
@@ -57,7 +58,10 @@ main : Signal.Signal Html.Html
 main =
   app.html
 
+port audio : Signal Int
+port audio =
+  Signal.map random (every second)
+  |> Signal.map round
 
-port runner : Signal (Task.Task Never ())
-port runner =
-  app.tasks
+random t =
+  sqrt t / 10000
