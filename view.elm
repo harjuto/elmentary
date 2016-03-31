@@ -30,8 +30,8 @@ space =
 planet : SolarSystem.Planet -> Form
 planet planet =
   circle planetSize
-    |> filled rockBrown
-    |> move (sin planet.angle * (planet.radius * 30), cos planet.angle * (planet.radius * 30))
+    |> filled (if planet.hit then Color.red else rockBrown)
+    |> move (cos planet.angle * (planet.radius * 30), sin -planet.angle * (planet.radius * 30))
 
 asteroidField : Form
 asteroidField =

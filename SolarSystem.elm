@@ -40,9 +40,12 @@ tick planet =
   let
     oldAngle = planet.angle
     newAngle = normalizeAngle (oldAngle + planet.speed)
-    
+    hit = (newAngle /= (oldAngle + planet.speed))
   in
-    { planet | angle = newAngle }
+    {
+      planet | angle = newAngle, hit = hit
+
+    }
 
 update : Action -> Model -> Model
 update action model =
