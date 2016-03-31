@@ -29,7 +29,10 @@ init =
 
 update : SolarSystem.Action ->  SolarSystem.Model -> ( SolarSystem.Model, Effects.Effects SolarSystem.Action )
 update action model =
-  (SolarSystem.update action model, Effects.none)
+  let
+    newModel = SolarSystem.update action model
+  in
+    (SolarSystem.update action model, Effects.none)
 
 timeSignal : Signal Time.Time
 timeSignal =
