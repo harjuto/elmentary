@@ -1,1 +1,5 @@
 # Elmentary
+
+```
+npm install
+```
