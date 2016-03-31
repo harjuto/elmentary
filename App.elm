@@ -7,4 +7,11 @@ import View exposing (..)
 main =
   StartApp.start { model = SolarSystem.initialModel, view = view, update = SolarSystem.update }
 
-view address model = fromElement (View.renderWorld model)
+view address model =
+  div []
+    [
+      div [] [ text (toString model.planets) ]
+    , button [ onClick address SolarSystem.Decrement ] [ text "-" ]
+    , button [ onClick address SolarSystem.Increment ] [ text "+" ]
+    , fromElement (View.renderWorld model)
+    ]
