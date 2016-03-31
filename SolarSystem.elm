@@ -6,7 +6,8 @@ type alias Planet =
   {
     radius: Float, -- Radius from the center of the solar system
     angle: Float, -- Angle at the angular orbit
-    speed: Float -- Angular speed
+    speed: Float, -- Angular speed
+    hit: Bool
   }
 type alias Model =
   {
@@ -17,7 +18,7 @@ type Action
   = AddPlanet | RemoveLastPlanet | Tick
 
 newPlanet: Float -> Planet
-newPlanet radius = { radius = radius, angle = 0, speed = 1 }
+newPlanet radius = { radius = radius, angle = 0, speed = 1, hit = False }
 
 initialModel : Model
 initialModel = { planets = [] }
@@ -39,6 +40,7 @@ tick planet =
   let
     oldAngle = planet.angle
     newAngle = normalizeAngle (oldAngle + planet.speed)
+    
   in
     { planet | angle = newAngle }
 
