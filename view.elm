@@ -2,11 +2,12 @@ module View where
 import Color exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
+import SolarSystem as SolarSystem
 
 
+renderWorld : SolarSystem.Model -> Element
 
-renderWorld : Element
-renderWorld =
+renderWorld model =
   collage 800 800
     [ circle 300
         |> filled clearGrey

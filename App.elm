@@ -7,4 +7,4 @@ import View exposing (..)
 main =
   StartApp.start { model = SolarSystem.initialModel, view = view, update = SolarSystem.update }
 
-view address model = fromElement View.renderWorld
+view address model = fromElement (View.renderWorld model)
