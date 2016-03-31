@@ -24,14 +24,17 @@ initialModel = { planets = [] }
 
 -- UPDATE
 
+fullRadius : Float
 fullRadius = 2 * pi
 
 -- TODO more sensible implementation
+normalizeAngle : Float -> Float
 normalizeAngle angle =
   if angle > fullRadius
     then normalizeAngle (angle - fullRadius)
     else angle
 
+tick : Planet -> Planet
 tick planet =
   let
     oldAngle = planet.angle
