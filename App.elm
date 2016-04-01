@@ -53,6 +53,11 @@ app =
     , view = view
     }
 
+hitPlanets : Signal (List SolarSystem.Planet)
+hitPlanets =
+  Signal.map (\model -> model.planets) app.model
+  |> Signal.map (List.filter (\planet -> planet.hit))
+  |> Signal.filter (\ps -> not (List.isEmpty ps)) []
 
 main : Signal.Signal Html.Html
 main =
