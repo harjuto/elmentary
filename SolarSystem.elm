@@ -21,13 +21,11 @@ type alias Model =
 type Action
   = AddPlanet | RemoveLastPlanet | Tick
 
-defaultNotes = Array.fromList [Notes.c4, Notes.d4, Notes.e4, Notes.f4, Notes.g4, Notes.a4, Notes.b4, Notes.c5, Notes.c5, Notes.d5, Notes.e5, Notes.f5, Notes.g5, Notes.a5, Notes.b5, Notes.c6]
-
 newPlanet: Int -> Planet
 newPlanet index =
   let
-    index = index % (Array.length defaultNotes)
-    radius = Array.get index defaultNotes
+    index = index % (Array.length Notes.defaultScale)
+    radius = Array.get index Notes.defaultScale
              |> Maybe.withDefault Notes.c1
   in
     { radius = radius, angle = 0, speed = 0.1, hit = False }
