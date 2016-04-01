@@ -12,7 +12,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "mkdir -p build && cp -r index.html elm.js ports lib build/",
+    "build": "mkdir -p build && cp -r index.html elm.js ports lib img build/",
     "clean": "rm -r build"
   },
   "author": "",
