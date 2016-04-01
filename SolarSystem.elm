@@ -22,6 +22,22 @@ type alias Model =
 type Action
   = AddPlanet | RemoveLastPlanet | Tick
 
+
+toPlanets : List Float -> List Planet
+toPlanets notes =
+  let
+    interval = 0.19
+    indexes = [1..(List.length notes)]
+    zipped = List.map2 (,) notes indexes
+    toPlanet (note, index) = {
+      radius = note,
+      angle = (toFloat index) * interval,
+      speed = 0.02,
+      ticksSinceHit = 100
+    }
+  in
+    List.map toPlanet zipped
+
 newPlanet: Int -> Planet
 newPlanet index =
   let
@@ -34,7 +50,10 @@ newPlanet index =
 initialModel : Model
 initialModel =
   let
-    planets = []
+    -- Empty case:
+    -- planets = []
+    -- Example melody
+    planets = toPlanets (List.reverse Notes.melody)
   in
     { planets = planets }
 
