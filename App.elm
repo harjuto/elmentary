@@ -39,7 +39,7 @@ update action model =
 
 timeSignal : Signal Time.Time
 timeSignal =
-  Time.fps 10
+  Time.fps 30
 
 tickSignal : Signal SolarSystem.Action
 tickSignal =
@@ -58,28 +58,17 @@ app =
 hitPlanets : Signal (List SolarSystem.Planet)
 hitPlanets =
   Signal.map (.planets) app.model
-  |> Signal.map (List.filter (.hit))
+  |> Signal.map (List.filter ( \planet -> planet.ticksSinceHit == 0))
   |> Signal.filter (\ps -> not (List.isEmpty ps)) []
 
 main : Signal.Signal Html.Html
 main =
   app.html
 
-logTee : a -> a
-logTee x =
-  Debug.log "log"
-  x
-
-fakePlanets : Signal Int
-fakePlanets =
-  hitPlanets
-  |> Signal.map (always 1)
-
-
-port audio : Signal Int
+port audio : Signal (List Int)
 port audio =
-  Signal.merge fakePlanets Keyboard.presses
-  |> Signal.map (always 4000)
+  hitPlanets
+  |> Signal.map (always [400, 600, 800])
   |> Signal.map (Debug.log "ping")
   -- |> Signal.filter True
 
