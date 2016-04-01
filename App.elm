@@ -4,14 +4,12 @@ module Main (..) where
 import Effects exposing (Effects, Never)
 import Html exposing (div, button, text, fromElement)
 import Html.Events exposing (onClick)
-import Time as Time
+import Time
 import Time exposing (..)
-import SolarSystem as SolarSystem
+import SolarSystem
 import StartApp
-import Task
-import Debug as Debug
+import Debug
 import View exposing (..)
-import Keyboard
 
 
 view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> Html.Html
@@ -21,8 +19,8 @@ view address model =
     button [ onClick address SolarSystem.RemoveLastPlanet ] [ text "-" ]
     , button [ onClick address SolarSystem.AddPlanet ] [ text "+" ]
     , button [ onClick address SolarSystem.Tick ] [ text "!" ]
-    , div [] [ text (toString model.planets) ]
     , fromElement (View.canvas model)
+    , div [] [ text (toString model.planets) ]
     ]
 
 init : ( SolarSystem.Model, Effects SolarSystem.Action )
@@ -75,6 +73,3 @@ port audio =
   |> Signal.map (\ps -> List.map getFrequency ps )
   |> Signal.map (Debug.log "ping")
   -- |> Signal.filter True
-
-random t =
-  t * 10

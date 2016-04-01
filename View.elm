@@ -29,20 +29,34 @@ canvas address model =
 
 space : Form
 space =
+<<<<<<< HEAD
   toForm (fittedImage canvasSize canvasSize "/images/space.jpg")
+=======
+  toForm (fittedImage canvasSize canvasSize "img/space.jpg")
+>>>>>>> 2d1cad82763437b9a1be57058b9eaeafc8533228
 
 planet : SolarSystem.Planet -> Form
 planet planet =
   let
+<<<<<<< HEAD
     image = if planet.ticksSinceHit < 10 then (fittedImage planetSize planetSize "/images/planethit.png") else (fittedImage planetSize planetSize "/images/planet.png")
+=======
+    image = if planet.ticksSinceHit < 10 then (fittedImage 50 50 "img/planethit.png") else (fittedImage 50 50 "img/planet.png")
+>>>>>>> 2d1cad82763437b9a1be57058b9eaeafc8533228
   in
     toForm image
       |> move (cos planet.angle * (planet.radius * radiusCoefficient), sin -planet.angle * (planet.radius * radiusCoefficient))
 
 
+<<<<<<< HEAD
 asteroidField : Signal.Address SolarSystem.Action -> Form
 asteroidField address =
   toForm (fittedImage (400) 100 "/images/asteroidfield.png")
+=======
+asteroidField : Form
+asteroidField =
+  toForm (fittedImage (400) 100 "img/asteroidfield.png")
+>>>>>>> 2d1cad82763437b9a1be57058b9eaeafc8533228
     |> moveX 200
     |> clickable Signal.message address Mouse.position 
 

@@ -12,7 +12,7 @@ script:
 
 branches:
   only:
-    - master
+    - production
 
 deploy:
   provider: s3
