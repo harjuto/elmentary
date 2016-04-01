@@ -1,4 +1,4 @@
-# Elmentary
+# Elmentary ![CI](https://travis-ci.org/harjuto/elmentary.svg)
 
 Space Art made at the Futurice CodeCamp 2016.
 
