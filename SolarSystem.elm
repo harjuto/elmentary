@@ -25,6 +25,7 @@ type Action
   = AddPlanet
   | ClearPlanets
   | Tick
+  | AddNote Float
   | ClickAddPlanet Float
 
 toPlanets : List Float -> List Planet
@@ -67,10 +68,7 @@ getInstrument r =
 
 newPlanetWithFreq : Float -> Planet
 newPlanetWithFreq freq =
-  let
-    noteFreq = roundToScale freq
-  in
-    { radius = noteFreq, angle = 0, speed = 0.03, ticksSinceHit = 0, instrument = "bass" }
+    { radius = freq, angle = 0, speed = 0.03, ticksSinceHit = 0, instrument = "bass" }
 
 roundToScale: Float -> Float
 roundToScale origFreq =
@@ -129,5 +127,7 @@ update action model =
         { model | planets = [] }
     Tick ->
         { model | planets = List.map tick model.planets}
+    AddNote freq ->
+        { model | planets = model.planets ++ [newPlanetWithFreq freq] }
     ClickAddPlanet x ->
-        { model | planets = model.planets ++ [newPlanetWithFreq x] }
+        { model | planets = model.planets ++ [newPlanetWithFreq (roundToScale x)] }

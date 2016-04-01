@@ -8,7 +8,7 @@ import SolarSystem
 
 actionSignal : Signal SolarSystem.Action
 actionSignal =
-  Signal.map SolarSystem.ClickAddPlanet keys
+  Signal.map SolarSystem.AddNote keys
 
 keys : Signal Float
 keys =
