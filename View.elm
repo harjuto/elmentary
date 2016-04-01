@@ -30,8 +30,7 @@ relativeClickSignal =
 actionSignal : Signal SolarSystem.Action
 actionSignal =
   Signal.map coordinatesToFreq relativeClickSignal
-    |> Signal.map toString
-    |> Signal.map SolarSystem.Click
+    |> Signal.map SolarSystem.ClickAddPlanet
 
 coordinatesToFreq : (Int, Int) -> Float
 coordinatesToFreq (x, y) =

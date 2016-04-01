@@ -24,7 +24,7 @@ type Action
   = AddPlanet
   | RemoveLastPlanet
   | Tick
-  | Click String
+  | ClickAddPlanet Float
 
 toPlanets : List Float -> List Planet
 toPlanets notes =
@@ -50,18 +50,21 @@ newPlanet index =
   in
     { radius = radius, angle = 0, speed = 0.03, ticksSinceHit = 0 }
 
+newPlanetWithFreq : Float -> Planet
+newPlanetWithFreq freq =
+    { radius = freq, angle = 0, speed = 0.03, ticksSinceHit = 0 }
+
 initialModel : Model
 initialModel =
   let
     -- Empty case:
-    -- planets = []
+    planets = []
     -- Example melody
-    planets = toPlanets (List.reverse Notes.melody)
+    -- planets = toPlanets (List.reverse Notes.melody)
   in
     { planets = planets, lastClick = "" }
 
 -- UPDATE
-
 fullRadius : Float
 fullRadius = 2 * pi
 
@@ -99,5 +102,5 @@ update action model =
         { model | planets = removeLast model.planets }
     Tick ->
         { model | planets = List.map tick model.planets}
-    Click x ->
-        { model | lastClick = x}
+    ClickAddPlanet x ->
+        { model | planets = model.planets ++ [newPlanetWithFreq x] }
