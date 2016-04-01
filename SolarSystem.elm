@@ -11,17 +11,21 @@ type alias Planet =
     radius: Float, -- Radius from the center of the solar system
     angle: Float, -- Angle at the angular orbit
     speed: Float, -- Angular speed
-    ticksSinceHit: Int
+    ticksSinceHit: Int,
+    instrument: String -- What instrument to use. Alternatives in audio.js
   }
 
 type alias Model =
   {
-    planets: List Planet
+    planets: List Planet,
+    lastClick: String
   }
 
 type Action
-  = AddPlanet | RemoveLastPlanet | Tick
-
+  = AddPlanet
+  | RemoveLastPlanet
+  | Tick
+  | ClickAddPlanet Float
 
 toPlanets : List Float -> List Planet
 toPlanets notes =
@@ -33,7 +37,8 @@ toPlanets notes =
       radius = note,
       angle = (toFloat index) * interval,
       speed = 0.02,
-      ticksSinceHit = 100
+      ticksSinceHit = 100,
+      instrument = "saw"
     }
   in
     List.map toPlanet zipped
@@ -45,20 +50,36 @@ newPlanet index =
     radius = Array.get index Notes.defaultScale
              |> Maybe.withDefault Notes.c1
   in
-    { radius = radius, angle = 0, speed = 0.03, ticksSinceHit = 0 }
+    {
+      radius = radius,
+      angle = 0,
+      speed = 0.03,
+      ticksSinceHit = 0,
+      instrument = (getInstrument radius)
+    }
+
+getInstrument : Float -> String
+getInstrument r =
+  case (round r) % 2 of
+    0 -> "saw"
+    _ -> "bass"
+
+
+newPlanetWithFreq : Float -> Planet
+newPlanetWithFreq freq =
+    { radius = freq, angle = 0, speed = 0.03, ticksSinceHit = 0 }
 
 initialModel : Model
 initialModel =
   let
     -- Empty case:
-    -- planets = []
+    planets = []
     -- Example melody
-    planets = toPlanets (List.reverse Notes.melody)
+    -- planets = toPlanets (List.reverse Notes.melody)
   in
-    { planets = planets }
+    { planets = planets, lastClick = "" }
 
 -- UPDATE
-
 fullRadius : Float
 fullRadius = 2 * pi
 
@@ -96,3 +117,5 @@ update action model =
         { model | planets = removeLast model.planets }
     Tick ->
         { model | planets = List.map tick model.planets}
+    ClickAddPlanet x ->
+        { model | planets = model.planets ++ [newPlanetWithFreq x] }

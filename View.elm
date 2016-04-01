@@ -2,9 +2,8 @@ module View where
 import Color exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
-import Notes as Notes
-import SolarSystem as SolarSystem
-import Signal
+import Notes
+import SolarSystem
 import Mouse
 
 canvasSize : Int
@@ -19,6 +18,26 @@ planetSize = 30
 -- Fitting notes from c1 to c3 to the universe circle
 radiusCoefficient : Float
 radiusCoefficient = ((universeSize - 10) / 2) / Notes.c4
+
+clickSignal : Signal (Int, Int)
+clickSignal =
+  Signal.sampleOn Mouse.clicks Mouse.position
+
+relativeClickSignal : Signal (Int, Int)
+relativeClickSignal =
+  Signal.map (\(x,y) -> (x - canvasSize // 2, y - canvasSize // 2)) clickSignal
+
+actionSignal : Signal SolarSystem.Action
+actionSignal =
+  Signal.map coordinatesToFreq relativeClickSignal
+    |> Signal.map SolarSystem.ClickAddPlanet
+
+coordinatesToFreq : (Int, Int) -> Float
+coordinatesToFreq (x, y) =
+  let
+    radius = sqrt ( (toFloat x) ^ 2 + (toFloat y) ^ 2)
+  in
+    radius / radiusCoefficient
 
 canvas : SolarSystem.Model -> Element
 canvas model =
