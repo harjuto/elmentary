@@ -11,7 +11,8 @@ type alias Planet =
     radius: Float, -- Radius from the center of the solar system
     angle: Float, -- Angle at the angular orbit
     speed: Float, -- Angular speed
-    ticksSinceHit: Int
+    ticksSinceHit: Int,
+    instrument: String -- What instrument to use. Alternatives in audio.js
   }
 
 type alias Model =
@@ -36,7 +37,8 @@ toPlanets notes =
       radius = note,
       angle = (toFloat index) * interval,
       speed = 0.02,
-      ticksSinceHit = 100
+      ticksSinceHit = 100,
+      instrument = "saw"
     }
   in
     List.map toPlanet zipped
@@ -48,11 +50,39 @@ newPlanet index =
     radius = Array.get index Notes.defaultScale
              |> Maybe.withDefault Notes.c1
   in
-    { radius = radius, angle = 0, speed = 0.03, ticksSinceHit = 0 }
+    {
+      radius = radius,
+      angle = 0,
+      speed = 0.03,
+      ticksSinceHit = 0,
+      instrument = (getInstrument radius)
+    }
+
+getInstrument : Float -> String
+getInstrument r =
+  case (round r) % 2 of
+    0 -> "saw"
+    _ -> "bass"
+
 
 newPlanetWithFreq : Float -> Planet
 newPlanetWithFreq freq =
-    { radius = freq, angle = 0, speed = 0.03, ticksSinceHit = 0 }
+  let
+    noteFreq = roundToScale freq
+  in
+    { radius = noteFreq, angle = 0, speed = 0.03, ticksSinceHit = 0, instrument = "bass" }
+
+roundToScale: Float -> Float
+roundToScale origFreq =
+  let
+    scale = Array.toList Notes.defaultScale
+    compareDifferences (_, diff1) (_, diff2) = compare diff1 diff2
+    sorted = List.map (\f -> (f, abs (f - origFreq))) scale
+          |> List.sortWith compareDifferences
+          |> List.map fst
+  in
+    Maybe.withDefault Notes.c3 (List.head sorted)
+
 
 initialModel : Model
 initialModel =

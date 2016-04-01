@@ -6,6 +6,7 @@ import Html exposing (div, button, text, fromElement)
 import Html.Events exposing (onClick)
 import Time
 import Time exposing (..)
+import KeyboardPiano
 import SolarSystem
 import StartApp
 import View exposing (..)
@@ -52,7 +53,7 @@ app : StartApp.App SolarSystem.Model
 app =
   StartApp.start
     { init = init
-    , inputs = [tickSignal, View.actionSignal]
+    , inputs = [tickSignal, View.actionSignal, KeyboardPiano.actionSignal]
     , update = update
     , view = view
     }
@@ -69,14 +70,7 @@ main =
 
 getSound : SolarSystem.Planet -> (Int, String)
 getSound planet =
-  (round (planet.radius), getInstrument planet)
-
-getInstrument : SolarSystem.Planet -> String
-getInstrument planet =
-  case (round planet.radius) % 2 of
-    0 -> "saw"
-    1 -> "bass"
-    _ -> "bass"
+  (round (planet.radius), planet.instrument)
 
 port audio : Signal (List (Int, String))
 port audio =
