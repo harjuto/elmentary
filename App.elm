@@ -18,10 +18,10 @@ view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> Html.Html
 view address model =
   div []
     [
-      div [] [ text (toString model.planets) ]
-    , button [ onClick address SolarSystem.RemoveLastPlanet ] [ text "-" ]
+    button [ onClick address SolarSystem.RemoveLastPlanet ] [ text "-" ]
     , button [ onClick address SolarSystem.AddPlanet ] [ text "+" ]
     , button [ onClick address SolarSystem.Tick ] [ text "!" ]
+    , div [] [ text (toString model.planets) ]
     , fromElement (View.canvas model)
     ]
 
@@ -58,17 +58,21 @@ app =
 hitPlanets : Signal (List SolarSystem.Planet)
 hitPlanets =
   Signal.map (.planets) app.model
-  |> Signal.map (List.filter ( \planet -> planet.ticksSinceHit == 0))
-  |> Signal.filter (\ps -> not (List.isEmpty ps)) []
+    |> Signal.map (List.filter ( \planet -> planet.ticksSinceHit == 0))
+    |> Signal.filter (\ps -> not (List.isEmpty ps)) []
 
 main : Signal.Signal Html.Html
 main =
   app.html
 
+getFrequency : SolarSystem.Planet -> Int
+getFrequency planet =
+  round (planet.radius)
+
 port audio : Signal (List Int)
 port audio =
   hitPlanets
-  |> Signal.map (always [400, 600, 800])
+  |> Signal.map (\ps -> List.map getFrequency ps )
   |> Signal.map (Debug.log "ping")
   -- |> Signal.filter True
 

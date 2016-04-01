@@ -8,6 +8,7 @@ install:
 
 script:
   - elm make App.elm --output elm.js --yes
+  - npm run build
 
 branches:
   only:
@@ -22,3 +23,4 @@ deploy:
   bucket: "elmentary"
   skip_cleanup: true
   region: "eu-west-1"
+  local_dir: build
