@@ -21,8 +21,8 @@ view address model =
     button [ onClick address SolarSystem.RemoveLastPlanet ] [ text "-" ]
     , button [ onClick address SolarSystem.AddPlanet ] [ text "+" ]
     , button [ onClick address SolarSystem.Tick ] [ text "!" ]
-    , div [] [ text (toString model.planets) ]
     , fromElement (View.canvas model)
+    , div [] [ text (toString model.planets) ]
     ]
 
 init : ( SolarSystem.Model, Effects SolarSystem.Action )
