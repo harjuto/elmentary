@@ -2,6 +2,8 @@ module View where
 import Color exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
+
+
 import SolarSystem as SolarSystem
 
 canvasSize : Int
@@ -11,7 +13,7 @@ universeSize : Float
 universeSize = 300
 
 planetSize : Float
-planetSize = 10
+planetSize = 50
 
 canvas : SolarSystem.Model -> Element
 canvas model =
@@ -22,21 +24,20 @@ canvas model =
 
 space : Form
 space =
-  circle universeSize
-    |> filled spaceBlack
-    |> move(0,0)
-
+  toForm (fittedImage canvasSize canvasSize "space.jpg")
 
 planet : SolarSystem.Planet -> Form
 planet planet =
-  circle planetSize
-    |> filled (if planet.hit then Color.red else rockBrown)
-    |> move (cos planet.angle * (planet.radius * 30), sin -planet.angle * (planet.radius * 30))
+  let
+    image = if planet.hit then (fittedImage 50 50 "planethit.png") else (fittedImage 50 50 "planet.png")
+  in
+    toForm image
+      |> move (cos planet.angle * (planet.radius * 50), sin -planet.angle * (planet.radius * 50))
 
 asteroidField : Form
 asteroidField =
-  traced (solid asteroidGray) asteroids
-
+  toForm (fittedImage (400) 100 "asteroidfield.png")
+    |> moveX 200
 asteroids : Path
 asteroids =
   path [ (0, 0), (universeSize, 0)]
