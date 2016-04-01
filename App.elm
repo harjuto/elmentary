@@ -20,10 +20,7 @@ view address model =
       div [ Style.canvas ] [fromElement (View.canvas model)]
     , div [ Style.controls ] [
         div [] [ text model.lastClick ]
-      , button [ onClick address SolarSystem.ClearPlanets ] [ text "-" ]
-      , button [ onClick address SolarSystem.AddPlanet ] [ text "+" ]
-      , button [ onClick address SolarSystem.Tick ] [ text "!" ]
-      -- , div [] [ text (toString model.planets) ]
+      , button [ onClick address SolarSystem.ClearPlanets ] [ text "Reset" ]
     ]
 
     ]
