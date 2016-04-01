@@ -9,6 +9,7 @@ import Time exposing (..)
 import SolarSystem as SolarSystem
 import StartApp
 import Task
+import Debug as Debug
 import View exposing (..)
 
 
@@ -37,7 +38,7 @@ update action model =
 
 timeSignal : Signal Time.Time
 timeSignal =
-  Time.fps 20
+  Time.fps 10
 
 tickSignal : Signal SolarSystem.Action
 tickSignal =
@@ -63,10 +64,15 @@ main : Signal.Signal Html.Html
 main =
   app.html
 
+logTee : a -> a
+logTee x =
+  Debug.log ("debug log" ++ (toString x))
+  x
+
 port audio : Signal Int
 port audio =
-  Signal.map random (every second)
-  |> Signal.map round
+  Signal.map random hitPlanets
+  |> Signal.map logTee
 
 random t =
-  sqrt t / 10000
+  (1 + List.length (t)) * 100
