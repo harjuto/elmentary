@@ -67,14 +67,7 @@ main =
 
 getSound : SolarSystem.Planet -> (Int, String)
 getSound planet =
-  (round (planet.radius), getInstrument planet)
-
-getInstrument : SolarSystem.Planet -> String
-getInstrument planet =
-  case (round planet.radius) % 2 of
-    0 -> "saw"
-    1 -> "bass"
-    _ -> "bass"
+  (round (planet.radius), planet.instrument)
 
 port audio : Signal (List (Int, String))
 port audio =
