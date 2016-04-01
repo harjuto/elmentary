@@ -7,6 +7,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Time
 import Time exposing (..)
+import KeyboardPiano
 import SolarSystem
 import StartApp
 import Debug
@@ -50,7 +51,7 @@ app : StartApp.App SolarSystem.Model
 app =
   StartApp.start
     { init = init
-    , inputs = [tickSignal, View.actionSignal]
+    , inputs = [tickSignal, View.actionSignal, KeyboardPiano.actionSignal]
     , update = update
     , view = view
     }
