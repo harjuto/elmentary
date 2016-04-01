@@ -59,10 +59,10 @@ mappings =
     ('y', Notes.a5),
     ('7', Notes.ais5),
     ('u', Notes.b5),
-    ('i', Notes.c5),
-    ('9', Notes.cis5),
-    ('o', Notes.d5),
-    ('0', Notes.dis5),
-    ('p', Notes.e5),
-    ('+', Notes.f5)
+    ('i', Notes.c6),
+    ('9', Notes.cis6),
+    ('o', Notes.d6),
+    ('0', Notes.dis6),
+    ('p', Notes.e6),
+    ('+', Notes.f6)
   ]
