@@ -22,7 +22,6 @@ type alias Model =
 type Action
   = AddPlanet | RemoveLastPlanet | Tick
 
-
 toPlanets : List Float -> List Planet
 toPlanets notes =
   let

@@ -4,8 +4,7 @@ import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
 import Notes as Notes
 import SolarSystem as SolarSystem
-import Signal
-import Mouse
+
 
 canvasSize : Int
 canvasSize = 800
