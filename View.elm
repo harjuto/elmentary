@@ -13,6 +13,10 @@ universeSize = 300
 planetSize : Float
 planetSize = 10
 
+-- Fitting notes from c1 to c3 to the universe circle
+radiusCoefficient : Float
+radiusCoefficient = 2
+
 canvas : SolarSystem.Model -> Element
 canvas model =
   collage canvasSize canvasSize
@@ -31,7 +35,7 @@ planet : SolarSystem.Planet -> Form
 planet planet =
   circle planetSize
     |> filled (if planet.hit then Color.red else rockBrown)
-    |> move (cos planet.angle * (planet.radius * 30), sin -planet.angle * (planet.radius * 30))
+    |> move (cos planet.angle * (planet.radius * radiusCoefficient), sin -planet.angle * (planet.radius * radiusCoefficient))
 
 asteroidField : Form
 asteroidField =

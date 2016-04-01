@@ -1,5 +1,9 @@
 module SolarSystem (..) where
 
+import Array as Array
+import Maybe as Maybe
+import Notes as Notes
+
 -- MODEL
 
 type alias Planet =
@@ -17,11 +21,23 @@ type alias Model =
 type Action
   = AddPlanet | RemoveLastPlanet | Tick
 
-newPlanet: Float -> Planet
-newPlanet radius = { radius = radius, angle = 0, speed = 0.1, hit = False }
+defaultNotes = Array.fromList [Notes.c1, Notes.d1, Notes.e1, Notes.f1, Notes.g1, Notes.a1, Notes.b1, Notes.c2, Notes.c2, Notes.d2, Notes.e2, Notes.f2, Notes.g2, Notes.a2, Notes.b2, Notes.c3]
+
+newPlanet: Int -> Planet
+newPlanet index =
+  let
+    index = index % (Array.length defaultNotes)
+    radius = Array.get index defaultNotes
+             |> Maybe.withDefault Notes.c1
+  in
+    { radius = radius, angle = 0, speed = 0.1, hit = False }
 
 initialModel : Model
-initialModel = { planets = [] }
+initialModel =
+  let
+    planets = []
+  in
+    { planets = planets }
 
 -- UPDATE
 
@@ -51,7 +67,7 @@ update : Action -> Model -> Model
 update action model =
   case action of
     AddPlanet ->
-      { model | planets = model.planets ++ [newPlanet ( toFloat (List.length model.planets))] }
+      { model | planets = model.planets ++ [newPlanet (List.length model.planets)] }
     RemoveLastPlanet ->
       let
         removeLast planets = if List.length planets == 0 then [] else List.take (List.length planets - 1) planets
