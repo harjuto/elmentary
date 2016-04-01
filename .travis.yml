@@ -8,6 +8,7 @@ install:
 
 script:
   - elm make App.elm --output elm.js --yes
+  - npm run build
 
 branches:
   only:
