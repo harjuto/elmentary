@@ -5,9 +5,22 @@ import Graphics.Element exposing (..)
 import Notes
 import SolarSystem
 import Mouse
+import Window
 
-canvasSize : Int
-canvasSize = 800
+-- canvasWidth : Int
+-- canvasWidth =
+--   Window.width
+--   |>
+--
+-- canvasHeight : Int
+-- canvasHeight =
+--   Window.height
+
+canvasWidth : Int
+canvasWidth = 1600
+
+canvasHeight : Int
+canvasHeight = 800
 
 universeSize : Float
 universeSize = 300
@@ -25,7 +38,7 @@ clickSignal =
 
 relativeClickSignal : Signal (Int, Int)
 relativeClickSignal =
-  Signal.map (\(x,y) -> (x - canvasSize // 2, y - canvasSize // 2)) clickSignal
+  Signal.map (\(x,y) -> (x - canvasWidth // 2, y - canvasHeight // 2)) clickSignal
 
 actionSignal : Signal SolarSystem.Action
 actionSignal =
@@ -41,14 +54,14 @@ coordinatesToFreq (x, y) =
 
 canvas : SolarSystem.Model -> Element
 canvas model =
-  collage canvasSize canvasSize
+  collage canvasWidth canvasHeight
     (
       [ space, asteroidField ] ++ List.map planet model.planets
     )
 
 space : Form
 space =
-  toForm (fittedImage canvasSize canvasSize "img/space.jpg")
+  toForm (fittedImage canvasWidth canvasHeight "img/space.jpg")
 
 planet : SolarSystem.Planet -> Form
 planet planet =
