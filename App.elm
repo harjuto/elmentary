@@ -65,20 +65,9 @@ main : Signal.Signal Html.Html
 main =
   app.html
 
-logTee : a -> a
-logTee x =
-  Debug.log "log"
-  x
-
-fakePlanets : Signal Int
-fakePlanets =
-  hitPlanets
-  |> Signal.map (always 1)
-
-
 port audio : Signal Int
 port audio =
-  Signal.merge fakePlanets Keyboard.presses
+  hitPlanets
   |> Signal.map (always 4000)
   |> Signal.map (Debug.log "ping")
   -- |> Signal.filter True
