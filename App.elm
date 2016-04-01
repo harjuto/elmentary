@@ -64,19 +64,19 @@ main : Signal.Signal Html.Html
 main =
   app.html
 
-logTee : a -> a
-logTee x =
-  Debug.log ("debug log" ++ (toString x))
-  x
+-- Version with signal from the model
+-- port audio : Signal Int
+-- port audio =
+--   Signal.map (always 400) hitPlanets
+--   |> Signal.map (Debug.log "ping")
 
+-- Version with signal straight from Time.every
 port audio : Signal Int
 port audio =
-  Signal.map random hitPlanets
-  |> Signal.map logTee
+  Signal.map (always 400) (Time.every Time.second)
+  |> Signal.map (Debug.log "ping")
+
 
 port tasks : Signal (Task.Task Effects.Never ())
 port tasks =
   app.tasks
-
-random t =
-  (1 + List.length (t)) * 100
