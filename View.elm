@@ -2,6 +2,7 @@ module View where
 import Color exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
+import Notes as Notes
 import SolarSystem as SolarSystem
 
 canvasSize : Int
@@ -15,7 +16,7 @@ planetSize = 10
 
 -- Fitting notes from c1 to c3 to the universe circle
 radiusCoefficient : Float
-radiusCoefficient = 0.2
+radiusCoefficient = ((universeSize - 50) / 2) / Notes.c5
 
 canvas : SolarSystem.Model -> Element
 canvas model =
