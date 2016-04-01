@@ -58,7 +58,7 @@ app =
 hitPlanets : Signal (List SolarSystem.Planet)
 hitPlanets =
   Signal.map (.planets) app.model
-  |> Signal.map (List.filter (.hit))
+  |> Signal.map (List.filter .hit)
   |> Signal.filter (\ps -> not (List.isEmpty ps)) []
 
 main : Signal.Signal Html.Html
