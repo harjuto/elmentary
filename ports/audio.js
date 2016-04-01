@@ -19,6 +19,7 @@ var bass = new Wad({
 		});
 
 function audio(freq) {
+  console.log('audio.js: ' + freq);
   if (freq > 20 && freq < 20000){
     bass.play({pitch: freq});
   } else {
