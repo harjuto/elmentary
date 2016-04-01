@@ -67,7 +67,7 @@ getInstrument r =
 
 newPlanetWithFreq : Float -> Planet
 newPlanetWithFreq freq =
-    { radius = freq, angle = 0, speed = 0.03, ticksSinceHit = 0 }
+    { radius = freq, angle = 0, speed = 0.03, ticksSinceHit = 0, instrument = "bass" }
 
 initialModel : Model
 initialModel =
