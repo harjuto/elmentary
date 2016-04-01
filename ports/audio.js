@@ -17,13 +17,18 @@ function setupAudio(solarsystem) {
 			        q : 0.180
 			    }
 			});
-
-	function audio(freq) {
-	  console.log('audio.js: ' + freq);
+	function playNote(freq) {
+		console.log('playNote: ' + freq);
 	  if (freq > 20 && freq < 20000){
 	    bass.play({pitch: freq});
 	  } else {
 	    console.log('Frequency is outside human hearing: ' + freq);
 	  }
+	}
+	function audio(freqs) {
+		console.log('audio.js: ' + freqs);
+		for (var i = 0; i < freqs.length; i++) {
+			playNote(freqs[i]);
+		}
 	}
 }

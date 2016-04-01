@@ -65,10 +65,10 @@ main : Signal.Signal Html.Html
 main =
   app.html
 
-port audio : Signal Int
+port audio : Signal (List Int)
 port audio =
   hitPlanets
-  |> Signal.map (always 4000)
+  |> Signal.map (always [400, 600, 800])
   |> Signal.map (Debug.log "ping")
   -- |> Signal.filter True
 
