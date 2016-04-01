@@ -23,8 +23,9 @@ type alias Model =
 
 type Action
   = AddPlanet
-  | RemoveLastPlanet
+  | ClearPlanets
   | Tick
+  | AddNote Float
   | ClickAddPlanet Float
 
 toPlanets : List Float -> List Planet
@@ -69,6 +70,18 @@ newPlanetWithFreq : Float -> Planet
 newPlanetWithFreq freq =
     { radius = freq, angle = 0, speed = 0.03, ticksSinceHit = 0, instrument = "bass" }
 
+roundToScale: Float -> Float
+roundToScale origFreq =
+  let
+    scale = Array.toList Notes.defaultScale
+    compareDifferences (_, diff1) (_, diff2) = compare diff1 diff2
+    sorted = List.map (\f -> (f, abs (f - origFreq))) scale
+          |> List.sortWith compareDifferences
+          |> List.map fst
+  in
+    Maybe.withDefault Notes.c3 (List.head sorted)
+
+
 initialModel : Model
 initialModel =
   let
@@ -110,12 +123,11 @@ update action model =
   case action of
     AddPlanet ->
       { model | planets = model.planets ++ [newPlanet (List.length model.planets)] }
-    RemoveLastPlanet ->
-      let
-        removeLast planets = if List.length planets == 0 then [] else List.take (List.length planets - 1) planets
-      in
-        { model | planets = removeLast model.planets }
+    ClearPlanets ->
+        { model | planets = [] }
     Tick ->
         { model | planets = List.map tick model.planets}
+    AddNote freq ->
+        { model | planets = model.planets ++ [newPlanetWithFreq freq] }
     ClickAddPlanet x ->
-        { model | planets = model.planets ++ [newPlanetWithFreq x] }
+        { model | planets = model.planets ++ [newPlanetWithFreq (roundToScale x)] }
