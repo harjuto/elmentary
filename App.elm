@@ -11,6 +11,7 @@ import StartApp
 import Task
 import Debug as Debug
 import View exposing (..)
+import Keyboard
 
 
 view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> Html.Html
@@ -56,27 +57,31 @@ app =
 
 hitPlanets : Signal (List SolarSystem.Planet)
 hitPlanets =
-  Signal.map (\model -> model.planets) app.model
-  |> Signal.map (List.filter (\planet -> planet.hit))
+  Signal.map (.planets) app.model
+  |> Signal.map (List.filter (.hit))
   |> Signal.filter (\ps -> not (List.isEmpty ps)) []
 
 main : Signal.Signal Html.Html
 main =
   app.html
 
--- Version with signal from the model
--- port audio : Signal Int
--- port audio =
---   Signal.map (always 400) hitPlanets
---   |> Signal.map (Debug.log "ping")
+logTee : a -> a
+logTee x =
+  Debug.log "log"
+  x
 
--- Version with signal straight from Time.every
+fakePlanets : Signal Int
+fakePlanets =
+  hitPlanets
+  |> Signal.map (always 1)
+
+
 port audio : Signal Int
 port audio =
-  Signal.map (always 400) (Time.every Time.second)
+  Signal.merge fakePlanets Keyboard.presses
+  |> Signal.map (always 4000)
   |> Signal.map (Debug.log "ping")
+  -- |> Signal.filter True
 
-
-port tasks : Signal (Task.Task Effects.Never ())
-port tasks =
-  app.tasks
+random t =
+  t * 10
