@@ -4,57 +4,6 @@ import Array as Array
 
 defaultScale = Array.fromList [c4, d4, e4, f4, g4, a4, b4, c5, c5, d5, e5, f5, g5, a5, b5, c6]
 
-c0 : Float
-c0 = 16.35
-
-cis0 : Float
-cis0 = 17.32
-
-des0 : Float
-des0 = 17.32
-
-d0 : Float
-d0 = 18.35
-
-dis0 : Float
-dis0 = 19.45
-
-ees0 : Float
-ees0 = 19.45
-
-e0 : Float
-e0 = 20.60
-
-f0 : Float
-f0 = 21.83
-
-fis0 : Float
-fis0 = 23.12
-
-ges0 : Float
-ges0 = 23.12
-
-g0 : Float
-g0 = 24.50
-
-gis0 : Float
-gis0 = 25.96
-
-aes0 : Float
-aes0 = 25.96
-
-a0 : Float
-a0 = 27.50
-
-ais0 : Float
-ais0 = 29.14
-
-bes0 : Float
-bes0 = 29.14
-
-b0 : Float
-b0 = 30.87
-
 c1 : Float
 c1 = 32.70
 
