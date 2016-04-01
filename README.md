@@ -2,6 +2,10 @@
 
 Space Art made at the Futurice CodeCamp 2016.
 
+* Tomi Harju
+* Touko Vainio-Kaila
+* Oskar Ehnström
+
 ## Quick Start
 
 ### Requirements
