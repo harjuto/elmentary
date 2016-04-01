@@ -1,0 +1,24 @@
+language: node_js
+
+node_js:
+  - "5"
+
+install:
+  - npm install
+
+script:
+  - elm make App.elm --output elm.js --yes
+
+branches:
+  only:
+    - master
+
+deploy:
+  provider: s3
+  access_key_id:
+    secure: "uVMKs0utJafDk8oWVEE3skP1d9xZ6rkdmIcLGw708sTsTProM1p0d3T+X19BJSBwzpnkxvZZjdbnJF/YhVxS9yrNM/D9PdSkEtynt6uZORkeHfvSwoamXZUbJ3V1fQeRm5M2g2GutmWXT2kKNBHRbdAtaBLZxOIw2RKmgL95ej1QCAXXLaBpD2EECd4RkWGEmupfDKQpk1mbJH9VaGo8C2RwZPh0a3WbbIztaRjFLUm6I5vyz+lXn2E0aafiBwnrIfgRYMQtAtZRG3p6vx50EU0wFKEG7Qtm12gHgA1M0hbIbWZdlhJN4e84BgOHpDXgVIcW4Kkw0DK24dNrKUdHIRs8X196fPaYcLe8lQ/WoEuq9w6oWf4Q49mI8X8bctAWJkREft5RZiMOoBuYgBCJAQJ1Dm+y+VmlWR+ylGWPVN5kcC1X35UYqb/8JTGLeW28QixgwTcMbDfPUhF/piZsni12dv7ELEzBROBOuVDA36yIbuoWk++Zqawfr6bi91J6gJQ72zN4YxlSIWFj5L0ZMFTS4gia9S/Z8a6BtV0C2eBU1H3DXAxC93cA9+jg62jPvWNnyR239TH+SPE4wqgDKl9jHHbNmMTvLqPHNfiLsrGKq0TXAzCgIGk7jvecajMXFIvuMp1B/2S/7YyGoJVkM50DDgxJpp9O6BzbneAX49s="
+  secret_access_key:
+    secure: "Ft5i2otYOLBoSuu4XA9nzBM4AgoUxRdnFhE/c1dQsh9JpmbhKF8KN8QfW7oucWlSxi/7CNY58GfIKVTi/3dPbSFj43idfIkxoTuNLSOklwHZ5+XFkpMGZaa74lV139p2RQXhM61Efg/tiYYB8oGlCinktXlHL3CyYyeiqMzWXxIjlMKmABUWu34PXzWo8oAArgc1y+x0RyzmXbZlBMIU+Agcx6ntizEdDr84U/i5H6+6LkS7yzvdexDIuMrvORDdJhwoeVSem3iaWxcOYUC02lYDmoajcMwy1/Wl2JP8xmaCjptdPJ4XiDtDRZN8BAwVQ9gjFG8OXeNBK+kVy9VtsiCY/haG83QToJPk5vudmqyfUaF/juF43Z5A/6W0M2NnBKsmueIuX6Fx8tSwmJLCXuU1E3MhbU6hHDFethLsCUGM0vH/9YWHB/AqY3YSPZ6IsqCi6dPMYvS1yU492wBXOV9nr6HZ5ZgAX1exn/8Uf4NY6tvikX72SWe3dx5lOA5d6VhQko3DFanFcw+VXyiYKNJ4SWsv3AM9YlkSve1uiBBhIH7JZSXBVMlIjUjx4Vhuzm6qo3dCGlADsTIZYTGN+haFqVrcrRBldXaljgidrITDwzSgsGTAktP4W8+Ph7CqlX2oUyYK4rA4ORwFPNvftBjbrnDNz4UR6LHDRoK33Jg="
+  bucket: "elmentary"
+  skip_cleanup: true
+  region: "eu-west-1"

@@ -9,7 +9,9 @@ import Time exposing (..)
 import SolarSystem as SolarSystem
 import StartApp
 import Task
+import Debug as Debug
 import View exposing (..)
+import Keyboard
 
 
 view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> Html.Html
@@ -37,7 +39,7 @@ update action model =
 
 timeSignal : Signal Time.Time
 timeSignal =
-  Time.fps 20
+  Time.fps 10
 
 tickSignal : Signal SolarSystem.Action
 tickSignal =
@@ -55,18 +57,31 @@ app =
 
 hitPlanets : Signal (List SolarSystem.Planet)
 hitPlanets =
-  Signal.map (\model -> model.planets) app.model
-  |> Signal.map (List.filter (\planet -> planet.hit))
+  Signal.map (.planets) app.model
+  |> Signal.map (List.filter (.hit))
   |> Signal.filter (\ps -> not (List.isEmpty ps)) []
 
 main : Signal.Signal Html.Html
 main =
   app.html
 
+logTee : a -> a
+logTee x =
+  Debug.log "log"
+  x
+
+fakePlanets : Signal Int
+fakePlanets =
+  hitPlanets
+  |> Signal.map (always 1)
+
+
 port audio : Signal Int
 port audio =
-  Signal.map random (every second)
-  |> Signal.map round
+  Signal.merge fakePlanets Keyboard.presses
+  |> Signal.map (always 4000)
+  |> Signal.map (Debug.log "ping")
+  -- |> Signal.filter True
 
 random t =
-  sqrt t / 10000
+  t * 10
