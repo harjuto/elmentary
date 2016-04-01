@@ -22,7 +22,7 @@ type alias Model =
 
 type Action
   = AddPlanet
-  | RemoveLastPlanet
+  | ClearPlanets
   | Tick
   | ClickAddPlanet Float
 
@@ -95,11 +95,8 @@ update action model =
   case action of
     AddPlanet ->
       { model | planets = model.planets ++ [newPlanet (List.length model.planets)] }
-    RemoveLastPlanet ->
-      let
-        removeLast planets = if List.length planets == 0 then [] else List.take (List.length planets - 1) planets
-      in
-        { model | planets = removeLast model.planets }
+    ClearPlanets ->
+        { model | planets = [] }
     Tick ->
         { model | planets = List.map tick model.planets}
     ClickAddPlanet x ->

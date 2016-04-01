@@ -3,26 +3,28 @@ module Main (..) where
 
 import Effects exposing (Effects, Never)
 import Html exposing (div, button, text, fromElement)
-import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Time
 import Time exposing (..)
 import SolarSystem
 import StartApp
-import Debug
 import View exposing (..)
+import Style exposing (..)
 
 
 view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> Html.Html
 view address model =
-  div []
+  div [ Style.container ]
     [
-     fromElement (View.canvas model)
-    , div [ style[ ("color", "white")]] [ text model.lastClick ]
-    , button [ onClick address SolarSystem.RemoveLastPlanet ] [ text "-" ]
-    , button [ onClick address SolarSystem.AddPlanet ] [ text "+" ]
-    , button [ onClick address SolarSystem.Tick ] [ text "!" ]
-    , div [] [ text (toString model.planets) ]
+      div [ Style.canvas ] [fromElement (View.canvas model)]
+    , div [ Style.controls ] [
+        div [] [ text model.lastClick ]
+      , button [ onClick address SolarSystem.ClearPlanets ] [ text "-" ]
+      , button [ onClick address SolarSystem.AddPlanet ] [ text "+" ]
+      , button [ onClick address SolarSystem.Tick ] [ text "!" ]
+      -- , div [] [ text (toString model.planets) ]
+    ]
+
     ]
 
 init : ( SolarSystem.Model, Effects SolarSystem.Action )
