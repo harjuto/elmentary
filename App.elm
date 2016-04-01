@@ -18,10 +18,10 @@ view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> Html.Html
 view address model =
   div []
     [
-      div [] [ text (toString model.planets) ]
-    , button [ onClick address SolarSystem.RemoveLastPlanet ] [ text "-" ]
+    button [ onClick address SolarSystem.RemoveLastPlanet ] [ text "-" ]
     , button [ onClick address SolarSystem.AddPlanet ] [ text "+" ]
     , button [ onClick address SolarSystem.Tick ] [ text "!" ]
+    , div [] [ text (toString model.planets) ]
     , fromElement (View.canvas model)
     ]
 
