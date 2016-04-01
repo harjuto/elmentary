@@ -7,7 +7,7 @@ install:
   - npm install
 
 script:
-  - elm App.elm --output elm.js
+  - elm make App.elm --output elm.js
 
 branches:
   only:
