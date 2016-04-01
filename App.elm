@@ -3,6 +3,7 @@ module Main (..) where
 
 import Effects exposing (Effects, Never)
 import Html exposing (div, button, text, fromElement)
+import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Time
 import Time exposing (..)
@@ -16,10 +17,11 @@ view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> Html.Html
 view address model =
   div []
     [
-    button [ onClick address SolarSystem.RemoveLastPlanet ] [ text "-" ]
+     fromElement (View.canvas model)
+    , div [ style[ ("color", "white")]] [ text model.lastClick ]
+    , button [ onClick address SolarSystem.RemoveLastPlanet ] [ text "-" ]
     , button [ onClick address SolarSystem.AddPlanet ] [ text "+" ]
     , button [ onClick address SolarSystem.Tick ] [ text "!" ]
-    , fromElement (View.canvas model)
     , div [] [ text (toString model.planets) ]
     ]
 
@@ -48,7 +50,7 @@ app : StartApp.App SolarSystem.Model
 app =
   StartApp.start
     { init = init
-    , inputs = [tickSignal]
+    , inputs = [tickSignal, View.actionSignal]
     , update = update
     , view = view
     }

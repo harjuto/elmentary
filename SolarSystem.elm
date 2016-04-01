@@ -16,11 +16,15 @@ type alias Planet =
 
 type alias Model =
   {
-    planets: List Planet
+    planets: List Planet,
+    lastClick: String
   }
 
 type Action
-  = AddPlanet | RemoveLastPlanet | Tick
+  = AddPlanet
+  | RemoveLastPlanet
+  | Tick
+  | Click String
 
 toPlanets : List Float -> List Planet
 toPlanets notes =
@@ -54,7 +58,7 @@ initialModel =
     -- Example melody
     planets = toPlanets (List.reverse Notes.melody)
   in
-    { planets = planets }
+    { planets = planets, lastClick = "" }
 
 -- UPDATE
 
@@ -95,3 +99,5 @@ update action model =
         { model | planets = removeLast model.planets }
     Tick ->
         { model | planets = List.map tick model.planets}
+    Click x ->
+        { model | lastClick = x}
