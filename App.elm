@@ -74,5 +74,9 @@ port audio =
   Signal.map random hitPlanets
   |> Signal.map logTee
 
+port tasks : Signal (Task.Task Effects.Never ())
+port tasks =
+  app.tasks
+
 random t =
   (1 + List.length (t)) * 100
