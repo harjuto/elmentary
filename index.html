@@ -10,7 +10,10 @@
   </body>
 
   <script type="text/javascript">
-    Elm.fullscreen(Elm.Main);
+    var app = Elm.fullscreen(Elm.Main);
+
+    // defined in ports/audio.js
+    setupAudio(app);
   </script>
 
 </html>
