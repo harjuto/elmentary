@@ -1,0 +1,22 @@
+language: node_js
+
+node_js:
+  - "5"
+
+install:
+  - npm install
+
+script:
+  - elm App.elm --output elm.js
+
+branches:
+  only:
+    - master
+
+deploy:
+  provider: s3
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  bucket: "elmentary"
+  skip_cleanup: true
+  region: "eu-west-1"
