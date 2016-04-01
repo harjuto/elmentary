@@ -21,7 +21,7 @@ type alias Model =
 type Action
   = AddPlanet | RemoveLastPlanet | Tick
 
-defaultNotes = Array.fromList [Notes.c1, Notes.d1, Notes.e1, Notes.f1, Notes.g1, Notes.a1, Notes.b1, Notes.c2, Notes.c2, Notes.d2, Notes.e2, Notes.f2, Notes.g2, Notes.a2, Notes.b2, Notes.c3]
+defaultNotes = Array.fromList [Notes.c4, Notes.d4, Notes.e4, Notes.f4, Notes.g4, Notes.a4, Notes.b4, Notes.c5, Notes.c5, Notes.d5, Notes.e5, Notes.f5, Notes.g5, Notes.a5, Notes.b5, Notes.c6]
 
 newPlanet: Int -> Planet
 newPlanet index =

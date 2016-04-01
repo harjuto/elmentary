@@ -15,7 +15,7 @@ planetSize = 10
 
 -- Fitting notes from c1 to c3 to the universe circle
 radiusCoefficient : Float
-radiusCoefficient = 2
+radiusCoefficient = 0.2
 
 canvas : SolarSystem.Model -> Element
 canvas model =

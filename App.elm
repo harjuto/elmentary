@@ -65,10 +65,14 @@ main : Signal.Signal Html.Html
 main =
   app.html
 
+getFrequency : SolarSystem.Planet -> Int
+getFrequency planet =
+  round (planet.radius)
+
 port audio : Signal (List Int)
 port audio =
   hitPlanets
-  |> Signal.map (always [400, 600, 800])
+  |> Signal.map (\ps -> List.map getFrequency ps )
   |> Signal.map (Debug.log "ping")
   -- |> Signal.filter True
 
