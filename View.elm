@@ -27,12 +27,12 @@ canvas model =
 
 space : Form
 space =
-  toForm (fittedImage canvasSize canvasSize "space.jpg")
+  toForm (fittedImage canvasSize canvasSize "img/space.jpg")
 
 planet : SolarSystem.Planet -> Form
 planet planet =
   let
-    image = if planet.ticksSinceHit < 10 then (fittedImage 50 50 "planethit.png") else (fittedImage 50 50 "planet.png")
+    image = if planet.ticksSinceHit < 10 then (fittedImage 50 50 "img/planethit.png") else (fittedImage 50 50 "img/planet.png")
   in
     toForm image
       |> move (cos planet.angle * (planet.radius * radiusCoefficient), sin -planet.angle * (planet.radius * radiusCoefficient))
@@ -40,7 +40,7 @@ planet planet =
 
 asteroidField : Form
 asteroidField =
-  toForm (fittedImage (400) 100 "asteroidfield.png")
+  toForm (fittedImage (400) 100 "img/asteroidfield.png")
     |> moveX 200
 
 asteroids : Path
