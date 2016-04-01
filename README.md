@@ -7,6 +7,7 @@ Space Art made at the Futurice CodeCamp 2016.
 ### Requirements
 
 * [elm](http://elm-lang.org/)
+* [npm](https://nodejs.org/en/)
 
 ### Installation
 ```
