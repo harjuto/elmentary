@@ -12,6 +12,7 @@ import Task
 import KeyboardPiano
 import SolarSystem
 import Models exposing (Model, Planet)
+import Notes
 import Signal
 import StartApp
 import View exposing (..)
@@ -32,9 +33,9 @@ view address model =
   H.div [ Style.container ]
     [
       H.div [ Style.canvas ] [H.fromElement (View.canvas model)]
-    , H.div [ Style.controls ] [
-        H.div [] [ H.text model.lastClick ]
-      , H.button [ onClick address SolarSystem.ClearPlanets, id "reset" ] [ H.text "Reset" ]
+    , H.div [ Style.controls, id "controls" ] [
+        H.button [ onClick address SolarSystem.ClearPlanets, id "reset" ] [ H.text "Reset" ]
+      , H.button [ onClick address SolarSystem.LoadSong, id "load" ] [ H.text "Load Song" ]
       , H.select
         [
           id "sound-selector",
@@ -108,9 +109,14 @@ main =
 
 getInstrument : String -> Planet -> String
 getInstrument sounds planet =
-  case sounds of
-    "piano" -> "piano"
-    "drums" -> "hihatOpen" -- TODO
+  let
+    getDrum planet =
+      if planet.radius == Notes.c4 then "hihatOpen"
+      else if planet.radius == Notes.d4 then "hihatClosed"
+      else if planet.radius == Notes.e4 then "snare"
+      else "bass" -- default
+  in case sounds of
+    "drums" -> getDrum planet
     x -> x -- default: pass straight as such
 
 getSound : String -> Planet -> (Int, String)

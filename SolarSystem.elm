@@ -12,6 +12,7 @@ import SongMapper
 type Action
   = AddPlanet
   | ClearPlanets
+  | LoadSong
   | Tick
   | AddNote Float
   | ClickAddPlanet Float
@@ -81,7 +82,7 @@ initialModel =
     -- planets = []
     -- Example melody
     -- planets = toPlanets (List.reverse Notes.melody)
-    planets = SongMapper.songToPlanets Notes.song1
+    planets = []
   in
     { planets = planets, lastClick = "", canvasSize = (800, 800), parallax = (0, 0), sounds = "piano" }
 
@@ -118,6 +119,8 @@ update action model =
       { model | planets = model.planets ++ [newPlanet (List.length model.planets)] }
     ClearPlanets ->
         { model | planets = [] }
+    LoadSong ->
+        { model | planets = SongMapper.songToPlanets Notes.song1}
     Tick ->
         { model | planets = List.map tick model.planets}
     AddNote freq ->
