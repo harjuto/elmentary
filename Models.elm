@@ -17,3 +17,6 @@ type alias Model =
     canvasSize: (Int, Int),
     parallax: (Float, Float)
   }
+
+defaultSpeed : Float
+defaultSpeed = 2 * pi / 256

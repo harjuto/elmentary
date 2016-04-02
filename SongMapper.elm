@@ -24,7 +24,7 @@ toPlanet2 note =
   let
     toPlanet (note) = {
       radius = note,
-      speed = 0.03,
+      speed = Models.defaultSpeed,
       ticksSinceHit = 100,
       angle = 0,
       instrument = "bass"
@@ -36,7 +36,7 @@ delayChord : Int -> List Planet -> List Planet
 delayChord index list  =
   let
     delay (note) = {
-      note | angle = (toFloat index) * 0.35
+      note | angle = (toFloat index) * Models.defaultSpeed * 16
     }
 
   in

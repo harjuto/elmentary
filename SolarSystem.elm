@@ -3,7 +3,7 @@ module SolarSystem (..) where
 import Array as Array
 import Maybe as Maybe
 import Notes as Notes
-import Models exposing (Model, Planet)
+import Models exposing (Model, Planet, defaultSpeed)
 import SongMapper
 -- MODEL
 
@@ -29,7 +29,7 @@ toPlanets notes =
     toPlanet (note, index) = {
       radius = note,
       angle = (toFloat index) * interval,
-      speed = 0.02,
+      speed = defaultSpeed,
       ticksSinceHit = 100,
       instrument = "saw"
     }
@@ -46,7 +46,7 @@ newPlanet index =
     {
       radius = radius,
       angle = 0,
-      speed = 0.03,
+      speed = defaultSpeed,
       ticksSinceHit = 0,
       instrument = (getInstrument radius)
     }
@@ -60,7 +60,7 @@ getInstrument r =
 
 newPlanetWithFreq : Float -> Planet
 newPlanetWithFreq freq =
-    { radius = freq, angle = 0, speed = 0.03, ticksSinceHit = 0, instrument = "bass" }
+    { radius = freq, angle = 0, speed = defaultSpeed, ticksSinceHit = 0, instrument = "bass" }
 
 roundToScale: Float -> Float
 roundToScale origFreq =
