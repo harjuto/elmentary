@@ -23,6 +23,11 @@ view address model =
     , H.div [ Style.controls ] [
         H.div [] [ H.text model.lastClick ]
       , H.button [ onClick address SolarSystem.ClearPlanets, id "reset" ] [ H.text "Reset" ]
+      , H.select [id "sound-selector"]
+        [
+          H.option [] [H.text "piano"],
+          H.option [] [H.text "drums"]
+        ]
     ]
 
     ]
