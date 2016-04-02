@@ -1,7 +1,6 @@
 -- From http://www.elm-tutorial.org/040_effects/startapp_with_effects.html
 module Main (..) where
 
-import Json.Decode as JD
 import Effects exposing (Effects, Never)
 import Html as H exposing (Html)
 import Html.Events exposing (onClick, on)
@@ -11,34 +10,34 @@ import Time exposing (..)
 import Task
 import KeyboardPiano
 import SolarSystem
-import Models exposing (Model, Planet)
+import Models
+import Config
 import Notes
 import Signal
 import StartApp
 import View exposing (..)
 import Style exposing (..)
 
-targetSelectedDecoder : JD.Decoder String
-targetSelectedDecoder = JD.at ["target", "value"] JD.string
+type Action
+    = SolarSystemAction SolarSystem.Action
+    | ConfigAction Config.Action
+    | NoOp
 
-selects : List Html
-selects =
-  List.map (\sound -> (H.option [] [H.text sound])) audioSoundIds
+type alias Model =
+  { solarSystem : Models.Model
+    , config : Config.Model
+  }
 
-view : Signal.Address SolarSystem.Action -> Model -> H.Html
+view : Signal.Address Action -> Model -> H.Html
 view address model =
   H.div [ Style.container ]
     [
-      H.div [ Style.canvas ] [H.fromElement (View.canvas model)]
+      H.div [ Style.canvas ] [H.fromElement (View.canvas model.solarSystem)]
     , H.div [ Style.controls, id "controls" ] [
-        H.button [ onClick address SolarSystem.ClearPlanets, id "reset" ] [ H.text "Reset" ]
-      , H.button [ onClick address SolarSystem.LoadSong, id "load" ] [ H.text "Load Song" ]
-      , H.select
-        [
-          id "sound-selector",
-          on "change" targetSelectedDecoder (Signal.message address << SolarSystem.SoundSelected)
-        ]
-        (List.map (\sound -> (H.option [] [H.text sound])) audioSoundIds)
+        H.p [] [ H.text "Press enter to go fullscreen." ]
+      , H.button [ onClick address (SolarSystemAction SolarSystem.ClearPlanets), id "reset" ] [ H.text "Reset" ]
+      , H.button [ onClick address (SolarSystemAction SolarSystem.LoadSong), id "load" ] [ H.text "Load Song" ]
+      , Config.view (Signal.forwardTo address ConfigAction) model.config
     ]
 
     ]
@@ -50,28 +49,42 @@ startMailbox : Signal.Mailbox ()
 startMailbox =
   Signal.mailbox ()
 
-sendInitialSignal : Effects SolarSystem.Action
+sendInitialSignal : Effects Action
 sendInitialSignal =
     Signal.send startMailbox.address ()
-        |> Task.map (always SolarSystem.NoOp)
+        |> Task.map (always NoOp)
         |> Effects.task
 
-init : ( Model, Effects SolarSystem.Action )
+init : (Model, Effects Action)
 init =
-  (  SolarSystem.initialModel, sendInitialSignal )
+  let
+    model = { solarSystem = SolarSystem.initialModel, config = Config.initialModel}
+  in
+    ( model, sendInitialSignal )
 
 
-update : SolarSystem.Action ->  Model -> ( Model, Effects.Effects SolarSystem.Action )
+update : Action ->  Model -> ( Model, Effects.Effects Action)
 update action model =
-    (SolarSystem.update action model, Effects.none)
+  case action of
+    SolarSystemAction act ->
+      let
+        solarModel = SolarSystem.update act model.solarSystem
+      in
+        (Model solarModel model.config, Effects.none)
+    ConfigAction act ->
+      let
+        configModel = Config.update act model.config
+      in
+        (Model model.solarSystem configModel, Effects.none)
+    NoOp -> (model, Effects.none)
 
 timeSignal : Signal Time.Time
 timeSignal =
   Time.fps 30
 
-tickSignal : Signal SolarSystem.Action
+tickSignal : Signal Action
 tickSignal =
-  Signal.map (\_ -> SolarSystem.Tick) timeSignal
+  Signal.map (\_ -> SolarSystemAction SolarSystem.Tick) timeSignal
 
 
 app : StartApp.App Model
@@ -82,23 +95,28 @@ app =
     StartApp.start
       { init = init
       , inputs = [tickSignal,
-                  View.canvasSizeSignal,
-                  View.actionSignal,
-                  KeyboardPiano.actionSignal,
-                  initialCanvasSize,
-                  View.mousePositionOffsetSignal]
+                  (View.canvasSizeSignal |> Signal.map SolarSystemAction),
+                  (View.actionSignal |> Signal.map SolarSystemAction),
+                  (KeyboardPiano.actionSignal |> Signal.map SolarSystemAction),
+                  (initialCanvasSize |> Signal.map SolarSystemAction),
+                  (View.mousePositionOffsetSignal |> Signal.map SolarSystemAction)]
       , update = update
       , view = view
       }
 
 sounds : Signal String
-sounds = Signal.map (.sounds) app.model
+sounds =
+  app.model
+  |> Signal.map (.config)
+  |> Signal.map (.sounds)
 
-hitPlanets : Signal (List Planet)
+hitPlanets : Signal (List Models.Planet)
 hitPlanets =
-  Signal.map (.planets) app.model
-    |> Signal.map (List.filter ( \planet -> planet.ticksSinceHit == 0))
-    |> Signal.filter (\ps -> not (List.isEmpty ps)) []
+  app.model
+  |> Signal.map (.solarSystem)
+  |> Signal.map (.planets)
+  |> Signal.map (List.filter ( \planet -> planet.ticksSinceHit == 0))
+  |> Signal.filter (\ps -> not (List.isEmpty ps)) []
 
 main : Signal.Signal H.Html
 main =
@@ -107,7 +125,7 @@ main =
 audioSoundIds : List String
 audioSoundIds = ["piano", "drums", "bass", "saw", "shortSine", "longSine", "hihatOpen", "hihatClosed", "ghost", "piano", "snareLoud"]
 
-getInstrument : String -> Planet -> String
+getInstrument : String -> Models.Planet -> String
 getInstrument sounds planet =
   let
     getDrum planet =
@@ -120,7 +138,7 @@ getInstrument sounds planet =
     "drums" -> getDrum planet
     x -> x -- default: pass straight as such
 
-getSound : String -> Planet -> (Int, String)
+getSound : String -> Models.Planet -> (Int, String)
 getSound sounds planet =
   (round (planet.radius), (getInstrument sounds planet))
 
