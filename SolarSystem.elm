@@ -3,23 +3,11 @@ module SolarSystem (..) where
 import Array as Array
 import Maybe as Maybe
 import Notes as Notes
-
+import Models exposing (Model, Planet)
+import SongMapper
 -- MODEL
 
-type alias Planet =
-  {
-    radius: Float, -- Radius from the center of the solar system
-    angle: Float, -- Angle at the angular orbit
-    speed: Float, -- Angular speed
-    ticksSinceHit: Int,
-    instrument: String -- What instrument to use. Alternatives in audio.js
-  }
 
-type alias Model =
-  {
-    planets: List Planet,
-    lastClick: String
-  }
 
 type Action
   = AddPlanet
@@ -27,6 +15,10 @@ type Action
   | Tick
   | AddNote Float
   | ClickAddPlanet Float
+  | CanvasSizeUpdate (Int, Int)
+  | NoOp
+  | ParallaxUpdate (Float, Float)
+  | SoundSelected String
 
 toPlanets : List Float -> List Planet
 toPlanets notes =
@@ -86,11 +78,12 @@ initialModel : Model
 initialModel =
   let
     -- Empty case:
-    planets = []
+    -- planets = []
     -- Example melody
     -- planets = toPlanets (List.reverse Notes.melody)
+    planets = SongMapper.songToPlanets Notes.song1
   in
-    { planets = planets, lastClick = "" }
+    { planets = planets, lastClick = "", canvasSize = (800, 800), parallax = (0, 0), sounds = "piano" }
 
 -- UPDATE
 fullRadius : Float
@@ -131,3 +124,10 @@ update action model =
         { model | planets = model.planets ++ [newPlanetWithFreq freq] }
     ClickAddPlanet x ->
         { model | planets = model.planets ++ [newPlanetWithFreq (roundToScale x)] }
+    CanvasSizeUpdate s ->
+        { model | canvasSize = s}
+    SoundSelected s ->
+        { model | sounds = (Debug.log "sound selected" s)}
+    NoOp -> model
+    ParallaxUpdate p ->
+      { model | parallax = p }

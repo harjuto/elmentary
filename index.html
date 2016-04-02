@@ -8,7 +8,21 @@
       body {
         background-color: black;
         background-image: url('img/space.jpg');
+        margin: 0;
+        padding: 0;
       }
+
+      #reset {
+        position: absolute;
+        left: 15px;
+        top: 15px;
+      }
+      #sound-selector {
+        position: absolute;
+        left: 15px;
+        top: 40px;
+      }
+
     </style>
   </head>
 
@@ -20,6 +34,8 @@
 
     // defined in ports/audio.js
     setupAudio(app);
+
   </script>
+  <script type="text/javascript" src="ports/cheating.js"></script>
 
 </html>

@@ -1,40 +1,70 @@
 -- From http://www.elm-tutorial.org/040_effects/startapp_with_effects.html
 module Main (..) where
 
+import Json.Decode as JD
 import Effects exposing (Effects, Never)
-import Html exposing (div, button, text, fromElement)
-import Html.Events exposing (onClick)
+import Html as H exposing (Html)
+import Html.Events exposing (onClick, on)
+import Html.Attributes exposing (id)
 import Time
 import Time exposing (..)
+import Task
 import KeyboardPiano
 import SolarSystem
+import Models exposing (Model, Planet)
+import Signal
 import StartApp
 import View exposing (..)
 import Style exposing (..)
 
+targetSelectedDecoder : JD.Decoder String
+targetSelectedDecoder = JD.at ["target", "value"] JD.string
 
-view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> Html.Html
+audioSoundIds : List String
+audioSoundIds = ["piano", "saw", "shortSine", "longSine", "hihatOpen", "hihatClosed", "ghost", "piano", "drums"]
+
+selects : List Html
+selects =
+  List.map (\sound -> (H.option [] [H.text sound])) audioSoundIds
+
+view : Signal.Address SolarSystem.Action -> Model -> H.Html
 view address model =
-  div [ Style.container ]
+  H.div [ Style.container ]
     [
-      div [ Style.canvas ] [fromElement (View.canvas model)]
-    , div [ Style.controls ] [
-        div [] [ text model.lastClick ]
-      , button [ onClick address SolarSystem.ClearPlanets ] [ text "Reset" ]
+      H.div [ Style.canvas ] [H.fromElement (View.canvas model)]
+    , H.div [ Style.controls ] [
+        H.div [] [ H.text model.lastClick ]
+      , H.button [ onClick address SolarSystem.ClearPlanets, id "reset" ] [ H.text "Reset" ]
+      , H.select
+        [
+          id "sound-selector",
+          on "change" targetSelectedDecoder (Signal.message address << SolarSystem.SoundSelected)
+        ]
+        (List.map (\sound -> (H.option [] [H.text sound])) audioSoundIds)
     ]
 
     ]
 
-init : ( SolarSystem.Model, Effects SolarSystem.Action )
+
+-- startMailbox & sendInitialSignal for getting the inital window dimensions
+
+startMailbox : Signal.Mailbox ()
+startMailbox =
+  Signal.mailbox ()
+
+sendInitialSignal : Effects SolarSystem.Action
+sendInitialSignal =
+    Signal.send startMailbox.address ()
+        |> Task.map (always SolarSystem.NoOp)
+        |> Effects.task
+
+init : ( Model, Effects SolarSystem.Action )
 init =
-  (  SolarSystem.initialModel, Effects.none )
+  (  SolarSystem.initialModel, sendInitialSignal )
 
 
-update : SolarSystem.Action ->  SolarSystem.Model -> ( SolarSystem.Model, Effects.Effects SolarSystem.Action )
+update : SolarSystem.Action ->  Model -> ( Model, Effects.Effects SolarSystem.Action )
 update action model =
-  let
-    newModel = SolarSystem.update action model
-  in
     (SolarSystem.update action model, Effects.none)
 
 timeSignal : Signal Time.Time
@@ -46,30 +76,49 @@ tickSignal =
   Signal.map (\_ -> SolarSystem.Tick) timeSignal
 
 
-app : StartApp.App SolarSystem.Model
+app : StartApp.App Model
 app =
-  StartApp.start
-    { init = init
-    , inputs = [tickSignal, View.actionSignal, KeyboardPiano.actionSignal]
-    , update = update
-    , view = view
-    }
+  let
+    initialCanvasSize = View.initialCanvasSizeSignal startMailbox.signal
+  in
+    StartApp.start
+      { init = init
+      , inputs = [tickSignal,
+                  View.canvasSizeSignal,
+                  View.actionSignal,
+                  KeyboardPiano.actionSignal,
+                  initialCanvasSize,
+                  View.mousePositionOffsetSignal]
+      , update = update
+      , view = view
+      }
 
-hitPlanets : Signal (List SolarSystem.Planet)
+sounds : Signal String
+sounds = Signal.map (.sounds) app.model
+
+hitPlanets : Signal (List Planet)
 hitPlanets =
   Signal.map (.planets) app.model
     |> Signal.map (List.filter ( \planet -> planet.ticksSinceHit == 0))
     |> Signal.filter (\ps -> not (List.isEmpty ps)) []
 
-main : Signal.Signal Html.Html
+main : Signal.Signal H.Html
 main =
   app.html
 
-getSound : SolarSystem.Planet -> (Int, String)
-getSound planet =
-  (round (planet.radius), planet.instrument)
+getInstrument : String -> Planet -> String
+getInstrument sounds planet =
+  case sounds of
+    "piano" -> "piano"
+    "drums" -> "hihatOpen" -- TODO
+    x -> x -- default: pass straight as such
+
+getSound : String -> Planet -> (Int, String)
+getSound sounds planet =
+  (round (planet.radius), (getInstrument sounds planet))
 
 port audio : Signal (List (Int, String))
 port audio =
-  hitPlanets
-  |> Signal.map (\ps -> List.map getSound ps )
+  Signal.sampleOn hitPlanets sounds
+  |> Signal.map2 (,) hitPlanets
+  |> Signal.map (\(ps, sounds) -> List.map (getSound sounds) ps )

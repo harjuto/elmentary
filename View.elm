@@ -4,29 +4,46 @@ import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
 import Notes
 import SolarSystem
+import Models exposing (Model, Planet)
 import Mouse
 import Window
 
--- canvasWidth : Int
--- canvasWidth =
---   Window.width
---   |>
---
--- canvasHeight : Int
--- canvasHeight =
---   Window.height
+canvasSizeSignal : Signal SolarSystem.Action
+canvasSizeSignal =
+  Window.dimensions
+  |> Signal.map (\x -> Debug.log "size: " x )
+  |> Signal.map SolarSystem.CanvasSizeUpdate
 
-canvasWidth : Int
-canvasWidth = 1600
+initialCanvasSizeSignal: Signal x -> Signal SolarSystem.Action
+initialCanvasSizeSignal startSignal =
+  Signal.sampleOn startSignal canvasSizeSignal
 
-canvasHeight : Int
-canvasHeight = 800
+maxParallax : Int
+maxParallax = 80
+
+mousePositionOffsetSignal : Signal SolarSystem.Action
+mousePositionOffsetSignal =
+  Signal.map2 calculateOffset Mouse.position Window.dimensions
+  |> Signal.map SolarSystem.ParallaxUpdate
+
+calculateOffset : (Int, Int) -> (Int, Int) -> (Float, Float)
+calculateOffset m w =
+  let
+    halfWidth = toFloat (fst w) / 2
+    halfHeight = toFloat (snd w) / 2
+    mouseX = toFloat (fst m)
+    mouseY = toFloat (snd m)
+    x = ((halfWidth - mouseX) / halfWidth) * toFloat maxParallax
+    y = ((halfHeight - mouseY) / halfHeight) * toFloat maxParallax
+  in
+    (x, y)
 
 universeSize : Float
 universeSize = 300
 
 planetSize : Int
 planetSize = 30
+
 
 -- Fitting notes from c1 to c3 to the universe circle
 radiusCoefficient : Float
@@ -38,7 +55,7 @@ clickSignal =
 
 relativeClickSignal : Signal (Int, Int)
 relativeClickSignal =
-  Signal.map (\(x,y) -> (x - canvasWidth // 2, y - canvasHeight // 2)) clickSignal
+  Signal.map2 (\(x,y) (w,h) -> (x - w // 2, y - h // 2)) clickSignal Window.dimensions
 
 actionSignal : Signal SolarSystem.Action
 actionSignal =
@@ -52,18 +69,19 @@ coordinatesToFreq (x, y) =
   in
     radius / radiusCoefficient
 
-canvas : SolarSystem.Model -> Element
+canvas : Model -> Element
 canvas model =
-  collage canvasWidth canvasHeight
+  collage (fst model.canvasSize) (snd model.canvasSize)
     (
-      [ space, asteroidField ] ++ List.map planet model.planets
+      [ (space model.canvasSize model.parallax), asteroidField ] ++ List.map planet model.planets
     )
 
-space : Form
-space =
-  toForm (fittedImage canvasWidth canvasHeight "img/space.jpg")
+space : (Int, Int) -> (Float, Float) -> Form
+space (width, height) (x, y) =
+    toForm (fittedImage (width +  maxParallax*2) (height + maxParallax*2) "img/space2.jpg")
+    |> move (x, y)
 
-planet : SolarSystem.Planet -> Form
+planet : Planet -> Form
 planet planet =
   let
     image = if planet.ticksSinceHit < 10 then (fittedImage 50 50 "img/planethit.png") else (fittedImage 50 50 "img/planet.png")
