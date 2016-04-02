@@ -26,6 +26,9 @@ $ node_modules/elm-live/bin/elm-live.js App.elm --output elm.js
 ```
 Go fullscreen with the enter key, or resize the window to fill the screen.
 
+
+# License
+
 The MIT License (MIT)
 Copyright (c) <year> <copyright holders>
 
