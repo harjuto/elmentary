@@ -52,7 +52,7 @@ canvas : Model -> Element
 canvas model =
   collage (fst model.canvasSize) (snd model.canvasSize)
     (
-      [ (space model.canvasSize), asteroidField ] ++ List.map planet model.planets
+      [ (space model.canvasSize), (asteroidField model.canvasSize) ] ++ List.map planet model.planets
     )
 
 space : (Int, Int) -> Form
@@ -68,9 +68,9 @@ planet planet =
     toForm image
       |> move (cos planet.angle * (planet.radius * radiusCoefficient), sin -planet.angle * (planet.radius * radiusCoefficient))
 
-asteroidField : Form
-asteroidField =
-  toForm (fittedImage (400) 100 "img/asteroidfield.png")
+asteroidField : (Int, Int) -> Form
+asteroidField (width, height) =
+  toForm (fittedImage (round (toFloat width / 2)) 100 "img/asteroidfield.png")
     |> moveX 200
 
 asteroids : Path

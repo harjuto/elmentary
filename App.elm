@@ -9,6 +9,7 @@ import Time
 import Time exposing (..)
 import Task
 import KeyboardPiano
+import KeyboardGuitar
 import SolarSystem
 import Models exposing (Model, Planet)
 import StartApp
@@ -67,7 +68,7 @@ app =
   in
     StartApp.start
       { init = init
-      , inputs = [tickSignal, View.canvasSizeSignal, View.actionSignal, KeyboardPiano.actionSignal, initialCanvasSize]
+      , inputs = [tickSignal, View.canvasSizeSignal, View.actionSignal, KeyboardGuitar.actionSignal, initialCanvasSize]
       , update = update
       , view = view
       }

@@ -16,6 +16,7 @@ type Action
   | AddNote Float
   | ClickAddPlanet Float
   | CanvasSizeUpdate (Int, Int)
+  | AddChord Notes.Chord
   | NoOp
 
 toPlanets : List Float -> List Planet
@@ -124,4 +125,6 @@ update action model =
         { model | planets = model.planets ++ [newPlanetWithFreq (roundToScale x)] }
     CanvasSizeUpdate s ->
         { model | canvasSize = s}
+    AddChord chord ->
+      { model | planets = List.append model.planets (SongMapper.toNotes chord )}
     NoOp -> model
