@@ -33,9 +33,9 @@ view address model =
   H.div [ Style.container ]
     [
       H.div [ Style.canvas ] [H.fromElement (View.canvas model)]
-    , H.div [ Style.controls ] [
-        H.div [] [ H.text model.lastClick ]
-      , H.button [ onClick address SolarSystem.ClearPlanets, id "reset" ] [ H.text "Reset" ]
+    , H.div [ Style.controls, id "controls" ] [
+        H.button [ onClick address SolarSystem.ClearPlanets, id "reset" ] [ H.text "Reset" ]
+      , H.button [ onClick address SolarSystem.LoadSong, id "load" ] [ H.text "Load Song" ]
       , H.select
         [
           id "sound-selector",
