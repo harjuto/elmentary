@@ -10,7 +10,6 @@ import Time
 import Time exposing (..)
 import Task
 import KeyboardPiano
-import KeyboardGuitar
 import SolarSystem
 import Models exposing (Model, Planet)
 import Notes
