@@ -18,9 +18,7 @@ type Action
   | ClickAddPlanet Float
   | CanvasSizeUpdate (Int, Int)
   | AddChord Notes.Chord
-  | NoOp
   | ParallaxUpdate (Float, Float)
-  | SoundSelected String
 
 toPlanets : List Float -> List Planet
 toPlanets notes =
@@ -85,7 +83,7 @@ initialModel =
     -- planets = toPlanets (List.reverse Notes.melody)
     planets = []
   in
-    { planets = planets, lastClick = "", canvasSize = (800, 800), parallax = (0, 0), sounds = "piano" }
+    { planets = planets, lastClick = "", canvasSize = (800, 800), parallax = (0, 0) }
 
 -- UPDATE
 fullRadius : Float
@@ -132,8 +130,5 @@ update action model =
         { model | canvasSize = s}
     AddChord chord ->
       { model | planets = List.append model.planets (SongMapper.toNotes chord )}
-    SoundSelected s ->
-        { model | sounds = (Debug.log "sound selected" s)}
-    NoOp -> model
     ParallaxUpdate p ->
       { model | parallax = p }
