@@ -75,7 +75,7 @@ hitPlanets =
     |> Signal.map (List.filter ( \planet -> planet.ticksSinceHit == 0))
     |> Signal.filter (\ps -> not (List.isEmpty ps)) []
 
-main : Signal.Signal Html.Html
+main : Signal.Signal H.Html
 main =
   app.html
 
