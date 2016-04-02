@@ -32,9 +32,6 @@ init =
 
 update : SolarSystem.Action ->  SolarSystem.Model -> ( SolarSystem.Model, Effects.Effects SolarSystem.Action )
 update action model =
-  let
-    newModel = SolarSystem.update action model
-  in
     (SolarSystem.update action model, Effects.none)
 
 timeSignal : Signal Time.Time
@@ -50,7 +47,7 @@ app : StartApp.App SolarSystem.Model
 app =
   StartApp.start
     { init = init
-    , inputs = [tickSignal, View.actionSignal, KeyboardPiano.actionSignal]
+    , inputs = [tickSignal, View.canvasSizeSignal, View.actionSignal, KeyboardPiano.actionSignal]
     , update = update
     , view = view
     }

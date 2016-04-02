@@ -18,7 +18,8 @@ type alias Planet =
 type alias Model =
   {
     planets: List Planet,
-    lastClick: String
+    lastClick: String,
+    canvasSize: (Int, Int)
   }
 
 type Action
@@ -27,6 +28,7 @@ type Action
   | Tick
   | AddNote Float
   | ClickAddPlanet Float
+  | CanvasSizeUpdate (Int, Int)
 
 toPlanets : List Float -> List Planet
 toPlanets notes =
@@ -90,7 +92,7 @@ initialModel =
     -- Example melody
     -- planets = toPlanets (List.reverse Notes.melody)
   in
-    { planets = planets, lastClick = "" }
+    { planets = planets, lastClick = "", canvasSize = (800, 800) }
 
 -- UPDATE
 fullRadius : Float
@@ -131,3 +133,5 @@ update action model =
         { model | planets = model.planets ++ [newPlanetWithFreq freq] }
     ClickAddPlanet x ->
         { model | planets = model.planets ++ [newPlanetWithFreq (roundToScale x)] }
+    CanvasSizeUpdate s ->
+        { model | canvasSize = s}
