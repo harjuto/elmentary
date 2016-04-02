@@ -66,6 +66,12 @@ melody =
 
 
 -- chords
+open6 : Chord
+open6 =
+  {
+    notes = [ ais2, dis3, gis3, cis4, f4, ais4 ]
+  }
+
 am : Chord
 am =
   {
