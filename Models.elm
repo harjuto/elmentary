@@ -1,6 +1,6 @@
 module Models (..) where
 
--- MODEL
+-- MODELS
 type alias Planet =
   {
     radius: Float, -- Radius from the center of the solar system
@@ -13,5 +13,6 @@ type alias Planet =
 type alias Model =
   {
     planets: List Planet,
-    lastClick: String
+    lastClick: String,
+    canvasSize: (Int, Int)
   }

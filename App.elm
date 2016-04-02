@@ -2,10 +2,12 @@
 module Main (..) where
 
 import Effects exposing (Effects, Never)
-import Html exposing (div, button, text, fromElement)
+import Html as H exposing (Html)
 import Html.Events exposing (onClick)
+import Html.Attributes exposing (id)
 import Time
 import Time exposing (..)
+import Task
 import KeyboardPiano
 import SolarSystem
 import Models exposing (Model, Planet)
@@ -14,31 +16,39 @@ import View exposing (..)
 import Style exposing (..)
 
 
-view : Signal.Address SolarSystem.Action -> Model -> Html.Html
+view : Signal.Address SolarSystem.Action -> Model -> H.Html
+
 view address model =
-  div [ Style.container ]
+  H.div [ Style.container ]
     [
-      div [ Style.canvas ] [fromElement (View.canvas model)]
-    , div [ Style.controls ] [
-        div [] [ text model.lastClick ]
-      , button [ onClick address SolarSystem.ClearPlanets ] [ text "-" ]
-      , button [ onClick address SolarSystem.AddPlanet ] [ text "+" ]
-      , button [ onClick address SolarSystem.Tick ] [ text "!" ]
-      -- , div [] [ text (toString model.planets) ]
+      H.div [ Style.canvas ] [H.fromElement (View.canvas model)]
+    , H.div [ Style.controls ] [
+        H.div [] [ H.text model.lastClick ]
+      , H.button [ onClick address SolarSystem.ClearPlanets, id "reset" ] [ H.text "Reset" ]
     ]
 
     ]
+
+
+-- startMailbox & sendInitialSignal for getting the inital window dimensions
+
+startMailbox : Signal.Mailbox ()
+startMailbox =
+  Signal.mailbox ()
+
+sendInitialSignal : Effects SolarSystem.Action
+sendInitialSignal =
+    Signal.send startMailbox.address ()
+        |> Task.map (always SolarSystem.NoOp)
+        |> Effects.task
 
 init : ( Model, Effects SolarSystem.Action )
 init =
-  (  SolarSystem.initialModel, Effects.none )
+  (  SolarSystem.initialModel, sendInitialSignal )
 
 
 update : SolarSystem.Action ->  Model -> ( Model, Effects.Effects SolarSystem.Action )
 update action model =
-  let
-    newModel = SolarSystem.update action model
-  in
     (SolarSystem.update action model, Effects.none)
 
 timeSignal : Signal Time.Time
@@ -52,12 +62,15 @@ tickSignal =
 
 app : StartApp.App Model
 app =
-  StartApp.start
-    { init = init
-    , inputs = [tickSignal, View.actionSignal, KeyboardPiano.actionSignal]
-    , update = update
-    , view = view
-    }
+  let
+    initialCanvasSize = View.initialCanvasSizeSignal startMailbox.signal
+  in
+    StartApp.start
+      { init = init
+      , inputs = [tickSignal, View.canvasSizeSignal, View.actionSignal, KeyboardPiano.actionSignal, initialCanvasSize]
+      , update = update
+      , view = view
+      }
 
 hitPlanets : Signal (List Planet)
 hitPlanets =
@@ -65,7 +78,7 @@ hitPlanets =
     |> Signal.map (List.filter ( \planet -> planet.ticksSinceHit == 0))
     |> Signal.filter (\ps -> not (List.isEmpty ps)) []
 
-main : Signal.Signal Html.Html
+main : Signal.Signal H.Html
 main =
   app.html
 

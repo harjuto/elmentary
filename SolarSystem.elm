@@ -2,16 +2,21 @@ module SolarSystem (..) where
 
 import Array as Array
 import Maybe as Maybe
-import Notes
-import Models exposing (..)
+import Notes as Notes
+import Models exposing (Model, Planet)
 import SongMapper
+-- MODEL
+
+
 
 type Action
   = AddPlanet
   | ClearPlanets
   | Tick
+  | AddNote Float
   | ClickAddPlanet Float
-
+  | CanvasSizeUpdate (Int, Int)
+  | NoOp
 
 toPlanets : List Float -> List Planet
 toPlanets notes =
@@ -53,10 +58,7 @@ getInstrument r =
 
 newPlanetWithFreq : Float -> Planet
 newPlanetWithFreq freq =
-  let
-    noteFreq = roundToScale freq
-  in
-    { radius = noteFreq, angle = 0, speed = 0.03, ticksSinceHit = 0, instrument = "bass" }
+    { radius = freq, angle = 0, speed = 0.03, ticksSinceHit = 0, instrument = "bass" }
 
 roundToScale: Float -> Float
 roundToScale origFreq =
@@ -77,11 +79,9 @@ initialModel =
     -- planets = []
     -- Example melody
     -- planets = toPlanets (List.reverse Notes.melody)
-    -- From chords
     planets = SongMapper.songToPlanets Notes.song1
-
   in
-    { planets = planets, lastClick = "" }
+    { planets = planets, lastClick = "", canvasSize = (800, 800) }
 
 -- UPDATE
 fullRadius : Float
@@ -118,5 +118,10 @@ update action model =
         { model | planets = [] }
     Tick ->
         { model | planets = List.map tick model.planets}
+    AddNote freq ->
+        { model | planets = model.planets ++ [newPlanetWithFreq freq] }
     ClickAddPlanet x ->
-        { model | planets = model.planets ++ [newPlanetWithFreq x] }
+        { model | planets = model.planets ++ [newPlanetWithFreq (roundToScale x)] }
+    CanvasSizeUpdate s ->
+        { model | canvasSize = s}
+    NoOp -> model

@@ -4,10 +4,19 @@ import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
 import Notes
 import SolarSystem
+import Models exposing (Model, Planet)
 import Mouse
+import Window
 
-canvasSize : Int
-canvasSize = 800
+canvasSizeSignal : Signal SolarSystem.Action
+canvasSizeSignal =
+  Window.dimensions
+  |> Signal.map (\x -> Debug.log "size: " x )
+  |> Signal.map SolarSystem.CanvasSizeUpdate
+
+initialCanvasSizeSignal: Signal x -> Signal SolarSystem.Action
+initialCanvasSizeSignal startSignal =
+  Signal.sampleOn startSignal canvasSizeSignal
 
 universeSize : Float
 universeSize = 300
@@ -25,7 +34,7 @@ clickSignal =
 
 relativeClickSignal : Signal (Int, Int)
 relativeClickSignal =
-  Signal.map (\(x,y) -> (x - canvasSize // 2, y - canvasSize // 2)) clickSignal
+  Signal.map2 (\(x,y) (w,h) -> (x - w // 2, y - h // 2)) clickSignal Window.dimensions
 
 actionSignal : Signal SolarSystem.Action
 actionSignal =
@@ -39,18 +48,18 @@ coordinatesToFreq (x, y) =
   in
     radius / radiusCoefficient
 
-canvas : SolarSystem.Model -> Element
+canvas : Model -> Element
 canvas model =
-  collage canvasSize canvasSize
+  collage (fst model.canvasSize) (snd model.canvasSize)
     (
-      [ space, asteroidField ] ++ List.map planet model.planets
+      [ (space model.canvasSize), asteroidField ] ++ List.map planet model.planets
     )
 
-space : Form
-space =
-  toForm (fittedImage canvasSize canvasSize "img/space.jpg")
+space : (Int, Int) -> Form
+space (width, height) =
+  toForm (fittedImage width height "img/space2.jpg")
 
-planet : SolarSystem.Planet -> Form
+planet : Planet -> Form
 planet planet =
   let
     image = if planet.ticksSinceHit < 10 then (fittedImage 50 50 "img/planethit.png") else (fittedImage 50 50 "img/planet.png")

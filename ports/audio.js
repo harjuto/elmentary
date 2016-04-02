@@ -21,13 +21,41 @@ function setupAudio(solarsystem) {
 			        release : 0.1
 			    }
 			});
+	var shortSine = new Wad({
+	    source : 'sine',
+	    env : {
+	        attack : 0,
+	        decay : 0,
+	        sustain : 0.5,
+	        hold : 0,
+	        release : 0.1
+	    }
+	});
+	var longSine = new Wad({
+	    source : 'sine',
+	    env : {
+	        attack : 0,
+	        decay : 0,
+	        sustain : 1.9,
+	        hold : 0.4,
+	        release : 0.2
+	    }
+	});
+	var instruments = {
+		"saw": saw,
+		"bass": bass,
+		"shortSine": shortSine,
+		"longSine": longSine,
+		"hihatOpen": new Wad(Wad.presets.hiHatOpen),
+		"hihatClosed": new Wad(Wad.presets.hiHatClosed),
+		"snare": new Wad(Wad.presets.snare),
+		"piano": new Wad(Wad.presets.piano),
+		"ghost": new Wad(Wad.presets.ghost),
+	}
+	var defaultInstrument = instruments["piano"];
 
 	function getInstrument(instrument) {
-		if (instrument === 'saw') {
-			return saw;
-		} else {
-			return bass;
-		}
+		return instruments[instrument] || defaultInstrument;
 	}
 
 	function playNote(freq, instrument) {
