@@ -64,7 +64,12 @@ app =
   in
     StartApp.start
       { init = init
-      , inputs = [tickSignal, View.canvasSizeSignal, View.actionSignal, KeyboardPiano.actionSignal, initialCanvasSize]
+      , inputs = [tickSignal,
+                  View.canvasSizeSignal,
+                  View.actionSignal,
+                  KeyboardPiano.actionSignal,
+                  initialCanvasSize,
+                  View.mousePositionOffsetSignal]
       , update = update
       , view = view
       }

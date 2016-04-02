@@ -19,7 +19,8 @@ type alias Model =
   {
     planets: List Planet,
     lastClick: String,
-    canvasSize: (Int, Int)
+    canvasSize: (Int, Int),
+    parallax: (Float, Float)
   }
 
 type Action
@@ -30,6 +31,7 @@ type Action
   | ClickAddPlanet Float
   | CanvasSizeUpdate (Int, Int)
   | NoOp
+  | ParallaxUpdate (Float, Float)
 
 toPlanets : List Float -> List Planet
 toPlanets notes =
@@ -93,7 +95,7 @@ initialModel =
     -- Example melody
     -- planets = toPlanets (List.reverse Notes.melody)
   in
-    { planets = planets, lastClick = "", canvasSize = (800, 800) }
+    { planets = planets, lastClick = "", canvasSize = (800, 800), parallax = (0, 0) }
 
 -- UPDATE
 fullRadius : Float
@@ -137,3 +139,5 @@ update action model =
     CanvasSizeUpdate s ->
         { model | canvasSize = s}
     NoOp -> model
+    ParallaxUpdate p ->
+      { model | parallax = p }

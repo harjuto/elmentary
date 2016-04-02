@@ -17,11 +17,32 @@ initialCanvasSizeSignal: Signal x -> Signal SolarSystem.Action
 initialCanvasSizeSignal startSignal =
   Signal.sampleOn startSignal canvasSizeSignal
 
+maxParallax : Int
+maxParallax = 80
+
+mousePositionOffsetSignal : Signal SolarSystem.Action
+mousePositionOffsetSignal =
+  Signal.map2 calculateOffset Mouse.position Window.dimensions
+  |> Signal.map SolarSystem.ParallaxUpdate
+
+calculateOffset : (Int, Int) -> (Int, Int) -> (Float, Float)
+calculateOffset m w =
+  let
+    halfWidth = toFloat (fst w) / 2
+    halfHeight = toFloat (snd w) / 2
+    mouseX = toFloat (fst m)
+    mouseY = toFloat (snd m)
+    x = ((halfWidth - mouseX) / halfWidth) * toFloat maxParallax
+    y = ((halfHeight - mouseY) / halfHeight) * toFloat maxParallax
+  in
+    (x, y)
+
 universeSize : Float
 universeSize = 300
 
 planetSize : Int
 planetSize = 30
+
 
 -- Fitting notes from c1 to c3 to the universe circle
 radiusCoefficient : Float
@@ -51,12 +72,13 @@ canvas : SolarSystem.Model -> Element
 canvas model =
   collage (fst model.canvasSize) (snd model.canvasSize)
     (
-      [ (space model.canvasSize), asteroidField ] ++ List.map planet model.planets
+      [ (space model.canvasSize model.parallax), asteroidField ] ++ List.map planet model.planets
     )
 
-space : (Int, Int) -> Form
-space (width, height) =
-  toForm (fittedImage width height "img/space2.jpg")
+space : (Int, Int) -> (Float, Float) -> Form
+space (width, height) (x, y) =
+    toForm (fittedImage (width +  maxParallax*2) (height + maxParallax*2) "img/space2.jpg")
+    |> move (x, y)
 
 planet : SolarSystem.Planet -> Form
 planet planet =
