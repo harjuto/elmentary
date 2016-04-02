@@ -34,7 +34,8 @@ view address model =
     [
       H.div [ Style.canvas ] [H.fromElement (View.canvas model.solarSystem)]
     , H.div [ Style.controls, id "controls" ] [
-        H.button [ onClick address (SolarSystemAction SolarSystem.ClearPlanets), id "reset" ] [ H.text "Reset" ]
+        H.p [] [ H.text "Press enter to go fullscreen." ]
+      , H.button [ onClick address (SolarSystemAction SolarSystem.ClearPlanets), id "reset" ] [ H.text "Reset" ]
       , H.button [ onClick address (SolarSystemAction SolarSystem.LoadSong), id "load" ] [ H.text "Load Song" ]
       , Config.view (Signal.forwardTo address ConfigAction) model.config
     ]
