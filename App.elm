@@ -4,6 +4,7 @@ module Main (..) where
 import Effects exposing (Effects, Never)
 import Html exposing (div, button, text, fromElement)
 import Html.Events exposing (onClick)
+import Html.Attributes exposing (id)
 import Time
 import Time exposing (..)
 import Task
@@ -21,7 +22,7 @@ view address model =
       div [ Style.canvas ] [fromElement (View.canvas model)]
     , div [ Style.controls ] [
         div [] [ text model.lastClick ]
-      , button [ onClick address SolarSystem.ClearPlanets ] [ text "Reset" ]
+      , button [ onClick address SolarSystem.ClearPlanets, id "reset" ] [ text "Reset" ]
     ]
 
     ]

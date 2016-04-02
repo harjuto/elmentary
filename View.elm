@@ -56,7 +56,7 @@ canvas model =
 
 space : (Int, Int) -> Form
 space (width, height) =
-  toForm (fittedImage width height "img/space.jpg")
+  toForm (fittedImage width height "img/space2.jpg")
 
 planet : SolarSystem.Planet -> Form
 planet planet =
