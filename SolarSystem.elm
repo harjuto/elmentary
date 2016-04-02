@@ -17,6 +17,7 @@ type Action
   | ClickAddPlanet Float
   | CanvasSizeUpdate (Int, Int)
   | NoOp
+  | SoundSelected String
 
 toPlanets : List Float -> List Planet
 toPlanets notes =
@@ -81,7 +82,7 @@ initialModel =
     -- planets = toPlanets (List.reverse Notes.melody)
     planets = SongMapper.songToPlanets Notes.song1
   in
-    { planets = planets, lastClick = "", canvasSize = (800, 800) }
+    { planets = planets, lastClick = "", canvasSize = (800, 800), sounds = "piano" }
 
 -- UPDATE
 fullRadius : Float
@@ -124,4 +125,6 @@ update action model =
         { model | planets = model.planets ++ [newPlanetWithFreq (roundToScale x)] }
     CanvasSizeUpdate s ->
         { model | canvasSize = s}
+    SoundSelected s ->
+        { model | sounds = (Debug.log "sound selected" s)}
     NoOp -> model

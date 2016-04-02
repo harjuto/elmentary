@@ -14,5 +14,6 @@ type alias Model =
   {
     planets: List Planet,
     lastClick: String,
-    canvasSize: (Int, Int)
+    canvasSize: (Int, Int),
+    sounds: String
   }
