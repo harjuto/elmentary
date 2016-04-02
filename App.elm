@@ -105,7 +105,7 @@ main =
   app.html
 
 audioSoundIds : List String
-audioSoundIds = ["piano", "saw", "shortSine", "longSine", "hihatOpen", "hihatClosed", "ghost", "piano", "snareLoud", "drums"]
+audioSoundIds = ["piano", "drums", "bass", "saw", "shortSine", "longSine", "hihatOpen", "hihatClosed", "ghost", "piano", "snareLoud"]
 
 getInstrument : String -> Planet -> String
 getInstrument sounds planet =
