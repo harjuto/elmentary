@@ -39,7 +39,7 @@ calculateOffset m w =
     (x, y)
 
 universeSize : Float
-universeSize = 400
+universeSize = 350
 
 planetSize : Int
 planetSize = 30
@@ -80,7 +80,7 @@ canvas model =
 space : (Int, Int) -> (Float, Float) -> Form
 space (width, height) (x, y) =
     toForm (fittedImage (width +  maxParallax*2) (height + maxParallax*2) "img/space2.jpg")
-    |> move (x, y)
+    |> move (x, -y)
 
 planet : Planet -> Form
 planet planet =
