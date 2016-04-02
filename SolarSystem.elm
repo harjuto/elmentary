@@ -17,6 +17,7 @@ type Action
   | AddNote Float
   | ClickAddPlanet Float
   | CanvasSizeUpdate (Int, Int)
+  | AddChord Notes.Chord
   | NoOp
   | ParallaxUpdate (Float, Float)
   | SoundSelected String
@@ -129,6 +130,8 @@ update action model =
         { model | planets = model.planets ++ [newPlanetWithFreq (roundToScale x)] }
     CanvasSizeUpdate s ->
         { model | canvasSize = s}
+    AddChord chord ->
+      { model | planets = List.append model.planets (SongMapper.toNotes chord )}
     SoundSelected s ->
         { model | sounds = (Debug.log "sound selected" s)}
     NoOp -> model

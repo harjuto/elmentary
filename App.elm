@@ -10,6 +10,7 @@ import Time
 import Time exposing (..)
 import Task
 import KeyboardPiano
+import KeyboardGuitar
 import SolarSystem
 import Models exposing (Model, Planet)
 import Notes
@@ -20,9 +21,6 @@ import Style exposing (..)
 
 targetSelectedDecoder : JD.Decoder String
 targetSelectedDecoder = JD.at ["target", "value"] JD.string
-
-audioSoundIds : List String
-audioSoundIds = ["piano", "saw", "shortSine", "longSine", "hihatOpen", "hihatClosed", "ghost", "piano", "drums"]
 
 selects : List Html
 selects =
@@ -107,14 +105,18 @@ main : Signal.Signal H.Html
 main =
   app.html
 
+audioSoundIds : List String
+audioSoundIds = ["piano", "saw", "shortSine", "longSine", "hihatOpen", "hihatClosed", "ghost", "piano", "snareLoud", "drums"]
+
 getInstrument : String -> Planet -> String
 getInstrument sounds planet =
   let
     getDrum planet =
       if planet.radius == Notes.c4 then "hihatOpen"
       else if planet.radius == Notes.d4 then "hihatClosed"
-      else if planet.radius == Notes.e4 then "snare"
-      else "bass" -- default
+      else if planet.radius == Notes.e4 then "snareLoud"
+      else if planet.radius == Notes.f4 then "snare"
+      else "piano" -- default
   in case sounds of
     "drums" -> getDrum planet
     x -> x -- default: pass straight as such

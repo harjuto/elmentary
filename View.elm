@@ -39,7 +39,7 @@ calculateOffset m w =
     (x, y)
 
 universeSize : Float
-universeSize = 300
+universeSize = 400
 
 planetSize : Int
 planetSize = 30
