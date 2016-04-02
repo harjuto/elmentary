@@ -12,6 +12,7 @@ import Task
 import KeyboardPiano
 import SolarSystem
 import Models exposing (Model, Planet)
+import Notes
 import Signal
 import StartApp
 import View exposing (..)
@@ -108,9 +109,14 @@ main =
 
 getInstrument : String -> Planet -> String
 getInstrument sounds planet =
-  case sounds of
-    "piano" -> "piano"
-    "drums" -> "hihatOpen" -- TODO
+  let
+    getDrum planet =
+      if planet.radius == Notes.c4 then "hihatOpen"
+      else if planet.radius == Notes.d4 then "hihatClosed"
+      else if planet.radius == Notes.e4 then "snare"
+      else "bass" -- default
+  in case sounds of
+    "drums" -> getDrum planet
     x -> x -- default: pass straight as such
 
 getSound : String -> Planet -> (Int, String)
