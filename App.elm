@@ -2,7 +2,7 @@
 module Main (..) where
 
 import Effects exposing (Effects, Never)
-import Html exposing (div, button, text, fromElement)
+import Html as H exposing (Html)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (id)
 import Time
@@ -15,14 +15,14 @@ import View exposing (..)
 import Style exposing (..)
 
 
-view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> Html.Html
+view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> H.Html
 view address model =
-  div [ Style.container ]
+  H.div [ Style.container ]
     [
-      div [ Style.canvas ] [fromElement (View.canvas model)]
-    , div [ Style.controls ] [
-        div [] [ text model.lastClick ]
-      , button [ onClick address SolarSystem.ClearPlanets, id "reset" ] [ text "Reset" ]
+      H.div [ Style.canvas ] [H.fromElement (View.canvas model)]
+    , H.div [ Style.controls ] [
+        H.div [] [ H.text model.lastClick ]
+      , H.button [ onClick address SolarSystem.ClearPlanets, id "reset" ] [ H.text "Reset" ]
     ]
 
     ]
