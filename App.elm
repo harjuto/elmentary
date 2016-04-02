@@ -10,12 +10,14 @@ import Time exposing (..)
 import Task
 import KeyboardPiano
 import SolarSystem
+import Models exposing (Model, Planet)
 import StartApp
 import View exposing (..)
 import Style exposing (..)
 
 
-view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> H.Html
+view : Signal.Address SolarSystem.Action -> Model -> H.Html
+
 view address model =
   H.div [ Style.container ]
     [
@@ -32,6 +34,7 @@ view address model =
 
     ]
 
+
 -- startMailbox & sendInitialSignal for getting the inital window dimensions
 
 startMailbox : Signal.Mailbox ()
@@ -44,12 +47,12 @@ sendInitialSignal =
         |> Task.map (always SolarSystem.NoOp)
         |> Effects.task
 
-init : ( SolarSystem.Model, Effects SolarSystem.Action )
+init : ( Model, Effects SolarSystem.Action )
 init =
   (  SolarSystem.initialModel, sendInitialSignal )
 
 
-update : SolarSystem.Action ->  SolarSystem.Model -> ( SolarSystem.Model, Effects.Effects SolarSystem.Action )
+update : SolarSystem.Action ->  Model -> ( Model, Effects.Effects SolarSystem.Action )
 update action model =
     (SolarSystem.update action model, Effects.none)
 
@@ -62,7 +65,7 @@ tickSignal =
   Signal.map (\_ -> SolarSystem.Tick) timeSignal
 
 
-app : StartApp.App SolarSystem.Model
+app : StartApp.App Model
 app =
   let
     initialCanvasSize = View.initialCanvasSizeSignal startMailbox.signal
@@ -74,7 +77,7 @@ app =
       , view = view
       }
 
-hitPlanets : Signal (List SolarSystem.Planet)
+hitPlanets : Signal (List Planet)
 hitPlanets =
   Signal.map (.planets) app.model
     |> Signal.map (List.filter ( \planet -> planet.ticksSinceHit == 0))
@@ -84,7 +87,7 @@ main : Signal.Signal H.Html
 main =
   app.html
 
-getSound : SolarSystem.Planet -> (Int, String)
+getSound : Planet -> (Int, String)
 getSound planet =
   (round (planet.radius), planet.instrument)
 

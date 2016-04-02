@@ -4,6 +4,7 @@ import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
 import Notes
 import SolarSystem
+import Models exposing (Model, Planet)
 import Mouse
 import Window
 
@@ -47,7 +48,7 @@ coordinatesToFreq (x, y) =
   in
     radius / radiusCoefficient
 
-canvas : SolarSystem.Model -> Element
+canvas : Model -> Element
 canvas model =
   collage (fst model.canvasSize) (snd model.canvasSize)
     (
@@ -58,7 +59,7 @@ space : (Int, Int) -> Form
 space (width, height) =
   toForm (fittedImage width height "img/space2.jpg")
 
-planet : SolarSystem.Planet -> Form
+planet : Planet -> Form
 planet planet =
   let
     image = if planet.ticksSinceHit < 10 then (fittedImage 50 50 "img/planethit.png") else (fittedImage 50 50 "img/planet.png")

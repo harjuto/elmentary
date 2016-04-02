@@ -3,24 +3,11 @@ module SolarSystem (..) where
 import Array as Array
 import Maybe as Maybe
 import Notes as Notes
-
+import Models exposing (Model, Planet)
+import SongMapper
 -- MODEL
 
-type alias Planet =
-  {
-    radius: Float, -- Radius from the center of the solar system
-    angle: Float, -- Angle at the angular orbit
-    speed: Float, -- Angular speed
-    ticksSinceHit: Int,
-    instrument: String -- What instrument to use. Alternatives in audio.js
-  }
 
-type alias Model =
-  {
-    planets: List Planet,
-    lastClick: String,
-    canvasSize: (Int, Int)
-  }
 
 type Action
   = AddPlanet
@@ -89,9 +76,10 @@ initialModel : Model
 initialModel =
   let
     -- Empty case:
-    planets = []
+    -- planets = []
     -- Example melody
     -- planets = toPlanets (List.reverse Notes.melody)
+    planets = SongMapper.songToPlanets Notes.song1
   in
     { planets = planets, lastClick = "", canvasSize = (800, 800) }
 
