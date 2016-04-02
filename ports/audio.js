@@ -41,6 +41,21 @@ function setupAudio(solarsystem) {
 	        release : 0.2
 	    }
 	});
+	var snareLoud = new Wad({
+		 source : 'noise',
+		 env : {
+			 attack : 0.001,
+			 decay : 0.01,
+			 sustain : 0.8,
+			 hold : 0.03,
+			 release : 0.02
+		 },
+		 filter : {
+			 type : 'bandpass',
+			 frequency : 300,
+			 q : 0.180
+		 }
+	});
 	var instruments = {
 		"saw": saw,
 		"bass": bass,
@@ -49,6 +64,7 @@ function setupAudio(solarsystem) {
 		"hihatOpen": new Wad(Wad.presets.hiHatOpen),
 		"hihatClosed": new Wad(Wad.presets.hiHatClosed),
 		"snare": new Wad(Wad.presets.snare),
+		"snareLoud": snareLoud,
 		"piano": new Wad(Wad.presets.piano),
 		"ghost": new Wad(Wad.presets.ghost),
 	}
