@@ -6,6 +6,8 @@ Space Art made at the Futurice CodeCamp 2016.
 * Touko Vainio-Kaila
 * Oskar Ehnström
 
+Live demo available (at least by the time of writing) at http://elmentary.s3-website-eu-west-1.amazonaws.com/ (click the space with mouse or press keyboard buttons)
+
 ## Quick Start
 
 ### Requirements
