@@ -29,6 +29,7 @@ type Action
   | AddNote Float
   | ClickAddPlanet Float
   | CanvasSizeUpdate (Int, Int)
+  | NoOp
 
 toPlanets : List Float -> List Planet
 toPlanets notes =
@@ -135,3 +136,4 @@ update action model =
         { model | planets = model.planets ++ [newPlanetWithFreq (roundToScale x)] }
     CanvasSizeUpdate s ->
         { model | canvasSize = s}
+    NoOp -> model

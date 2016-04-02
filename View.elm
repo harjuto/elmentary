@@ -13,6 +13,10 @@ canvasSizeSignal =
   |> Signal.map (\x -> Debug.log "size: " x )
   |> Signal.map SolarSystem.CanvasSizeUpdate
 
+initialCanvasSizeSignal: Signal x -> Signal SolarSystem.Action
+initialCanvasSizeSignal startSignal =
+  Signal.sampleOn startSignal canvasSizeSignal
+
 universeSize : Float
 universeSize = 300
 
