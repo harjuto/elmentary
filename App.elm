@@ -8,12 +8,13 @@ import Time
 import Time exposing (..)
 import KeyboardPiano
 import SolarSystem
+import Models exposing (Model, Planet)
 import StartApp
 import View exposing (..)
 import Style exposing (..)
 
 
-view : Signal.Address SolarSystem.Action -> SolarSystem.Model -> Html.Html
+view : Signal.Address SolarSystem.Action -> Model -> Html.Html
 view address model =
   div [ Style.container ]
     [
@@ -28,12 +29,12 @@ view address model =
 
     ]
 
-init : ( SolarSystem.Model, Effects SolarSystem.Action )
+init : ( Model, Effects SolarSystem.Action )
 init =
   (  SolarSystem.initialModel, Effects.none )
 
 
-update : SolarSystem.Action ->  SolarSystem.Model -> ( SolarSystem.Model, Effects.Effects SolarSystem.Action )
+update : SolarSystem.Action ->  Model -> ( Model, Effects.Effects SolarSystem.Action )
 update action model =
   let
     newModel = SolarSystem.update action model
@@ -49,7 +50,7 @@ tickSignal =
   Signal.map (\_ -> SolarSystem.Tick) timeSignal
 
 
-app : StartApp.App SolarSystem.Model
+app : StartApp.App Model
 app =
   StartApp.start
     { init = init
@@ -58,7 +59,7 @@ app =
     , view = view
     }
 
-hitPlanets : Signal (List SolarSystem.Planet)
+hitPlanets : Signal (List Planet)
 hitPlanets =
   Signal.map (.planets) app.model
     |> Signal.map (List.filter ( \planet -> planet.ticksSinceHit == 0))
@@ -68,7 +69,7 @@ main : Signal.Signal Html.Html
 main =
   app.html
 
-getSound : SolarSystem.Planet -> (Int, String)
+getSound : Planet -> (Int, String)
 getSound planet =
   (round (planet.radius), planet.instrument)
 

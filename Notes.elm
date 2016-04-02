@@ -4,7 +4,7 @@ import Array
 
 type alias Song =
   {
-    chords: Chord,
+    chords: List(Chord),
     tempo: Int
   }
 
@@ -15,6 +15,19 @@ type alias Chord =
 
 defaultScale : Array.Array Float
 defaultScale = Array.fromList [c3, d3, e3, f3, g3, a3, b3, c4, d4, e4, f4, g4, a4, b4, c5, c5, d5, e5, f5, g5, a5, b5, c6]
+
+song1 : Song
+song1 =
+  {
+    chords =
+      [
+        am, am, am, am,
+        f, f, f, f,
+        c, c, c, c,
+        g, g, g, g
+      ],
+    tempo = 4
+  }
 
 melody : List Float
 melody =
@@ -56,10 +69,26 @@ melody =
 am : Chord
 am =
   {
-    -- E,A,C
-    notes = []
+    notes = [ a2, e3, a3, c4, e4 ]
   }
 
+f : Chord
+f =
+  {
+    notes = [ f2, c3, f3, a3, c4, f4 ]
+  }
+
+c : Chord
+c =
+  {
+    notes = [ c3, e3, g3, c4, e4]
+  }
+
+g : Chord
+g =
+  {
+    notes = [ g2, b2, d3, g3, b3, g4]
+  }
 c1 : Float
 c1 = 32.70
 
