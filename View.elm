@@ -60,6 +60,7 @@ relativeClickSignal =
 actionSignal : Signal SolarSystem.Action
 actionSignal =
   Signal.map coordinatesToFreq relativeClickSignal
+    |> Signal.filter (\freq -> freq < Notes.c6) Notes.c4
     |> Signal.map SolarSystem.ClickAddPlanet
 
 coordinatesToFreq : (Int, Int) -> Float
