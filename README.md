@@ -1,6 +1,6 @@
 # Elmentary ![CI](https://travis-ci.org/harjuto/elmentary.svg)
 
-Space Art made at the Futurice CodeCamp 2016.
+Space Art made at the Futurice CodeCamp 2016. Written with Elm language.
 
 * Tomi Harju
 * Touko Vainio-Kaila
