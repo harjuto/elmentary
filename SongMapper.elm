@@ -15,7 +15,7 @@ songToPlanets song =
 
 toPlanetsFromChords : Float -> Notes.Song -> List (List Planet)
 toPlanetsFromChords speed song =
-  List.map (toNotes speed) song.chords
+  List.map (toNotes speed) (List.reverse song.chords)
 
 toNotes : Float -> Notes.Chord -> List Planet
 toNotes speed chord =

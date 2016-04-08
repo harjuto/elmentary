@@ -23,10 +23,10 @@ song1 =
   {
     chords =
       [
-        am, am, am, am,
-        f, f, f, f,
+        g, g, g, g,
         c, c, c, c,
-        g, g, g, g
+        f, f, f, f,
+        am, am, am, am
       ],
     speed = Models.defaultSpeed,
     delayBetweenChords = Models.defaultSpeed * 16
