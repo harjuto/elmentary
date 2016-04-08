@@ -79,8 +79,6 @@ initialModel =
   let
     -- Empty case:
     -- planets = []
-    -- Example melody
-    -- planets = toPlanets (List.reverse Notes.melody)
     planets = []
   in
     { planets = planets, lastClick = "", canvasSize = (800, 800), parallax = (0, 0) }

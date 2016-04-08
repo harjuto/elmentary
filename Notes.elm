@@ -29,41 +29,44 @@ song1 =
     delayBetweenChords = Models.defaultSpeed * 16
   }
 
-melody : List Float
-melody =
-  [
-    a4,
-    a4,
-    e4,
-    f4,
-    g4,
-    g4,
-    f4,
-    e4,
-    d4,
-    d4,
-    d4,
-    f4,
-    a4,
-    a4,
-    g4,
-    f4,
-    e4,
-    e4,
-    e4,
-    f4,
-    g4,
-    g4,
-    a4,
-    a4,
-    f4,
-    f4,
-    d4,
-    d4,
-    d4
-  ]
-
-
+song2 : Song
+song2 =
+  {
+    chords = [
+      [a4],
+      [],
+      [e4],
+      [f4],
+      [g4],
+      [],
+      [f4],
+      [e4],
+      [d4],
+      [],
+      [],
+      [f4],
+      [a4],
+      [],
+      [g4],
+      [f4],
+      [e4],
+      [],
+      [],
+      [f4],
+      [g4],
+      [],
+      [a4],
+      [],
+      [f4],
+      [],
+      [d4],
+      [],
+      [d4],
+      []
+    ],
+    speed = Models.defaultSpeed,
+    delayBetweenChords = Models.defaultSpeed * 8
+  }
 
 -- chords
 open6 : Chord
