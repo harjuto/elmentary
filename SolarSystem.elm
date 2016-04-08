@@ -129,6 +129,6 @@ update action model =
     CanvasSizeUpdate s ->
         { model | canvasSize = s}
     AddChord chord ->
-      { model | planets = List.append model.planets (SongMapper.toNotes chord )}
+      { model | planets = List.append model.planets (SongMapper.toNotes Models.defaultSpeed chord )}
     ParallaxUpdate p ->
       { model | parallax = p }

@@ -1,11 +1,13 @@
 module Notes (..) where
 
 import Array
+import Models
 
 type alias Song =
   {
     chords: List(Chord),
-    tempo: Int
+    speed: Float,
+    delayBetweenChords: Float
   }
 
 type alias Chord =
@@ -26,7 +28,8 @@ song1 =
         c, c, c, c,
         g, g, g, g
       ],
-    tempo = 4
+    speed = Models.defaultSpeed,
+    delayBetweenChords = Models.defaultSpeed * 16
   }
 
 melody : List Float
